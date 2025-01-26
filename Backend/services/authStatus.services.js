@@ -7,7 +7,7 @@ dotenv.config();
 export const authStatus = (req, res) => {
     try {
         // Retrieve token from request body, cookies, or headers
-        const token = req?.cookies?.accessToken || req?.body?.accessToken || req?.headers?.['authorization']?.replace('Bearer ', '');
+        const token = req?.cookies?.accessToken || req?.body?.accessToken;
         console.log('auth ka token',token)
         // Check if the token is missing
         if (!token) {
