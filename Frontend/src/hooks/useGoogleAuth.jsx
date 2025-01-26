@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 import fetchWithAuth from '../api/fetchWithAuth'
+import {BASEURL} from '../utils/constants'
 
 const useGoogleAuth = () => {
   const [isGoogleAuth, setIsGoogleAuth] = useState(false)
 
   useEffect(() => {
     const checkGoogleAuth = async () => {
-      const googleRes = await fetchWithAuth(`http://localhost:4000/api/v1/google/auth/status`, {
+      const googleRes = await fetchWithAuth(`${BASEURL}/google/auth/status`, {
         method: 'GET',
         credentials: 'include',
         headers: {

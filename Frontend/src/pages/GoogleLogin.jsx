@@ -2,21 +2,25 @@
 import { useGoogleLogin } from "@react-oauth/google";
 import { googleAuth } from "../api/googleAuth";
 import PropTypes from 'prop-types'
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../../containers/authSlice";
 
 const GoogleLogin = ({setIsGoogleAuth}) => {
-	
+	const dispatch = useDispatch();
     const responseGoogle = async (authResult) => {
 		try {
 			console.log('googleLogin ka authresult',authResult)
 			if (authResult["code"]) {
 				const result = await googleAuth(authResult.code);
-                // console.log('result in googleLogin:',result)
+                console.log('result in googleLogin:',result)
 				const {email, firstName, lastName, role} = result.user;
 				const token = result.token;
-				const obj = {email,firstName,lastName, token, role};
-                // console.log('obj of googleLogin:',obj);
-				localStorage.setItem('user-info',JSON.stringify(obj));
+				const user = {email,firstName,lastName, token, role};
+                console.log('obj of googleLogin:',user);
+				localStorage.setItem('user-info',JSON.stringify(user));
 				setIsGoogleAuth(true);
+				// Save user data in Redux state
+				dispatch(loginSuccess(user));
 				
 			} else {
 				// console.log("error in googlelogin:",authResult);

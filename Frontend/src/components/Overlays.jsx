@@ -7,6 +7,6 @@ const mountElement = document.getElementById("overlays");
 
 const Overlays = () => {
   const ui = useAtomValue(uiAtom);
-  return createPortal(<>{ui.modal && <Modal />}</>, mountElement);
+  return createPortal(<>{ui.modal && <Modal analytics={ui.analytics || []} />}</>, mountElement);
 };
 export default Overlays;

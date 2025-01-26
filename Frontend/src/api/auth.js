@@ -1,6 +1,6 @@
-const BASE_URL = "http://localhost:4000/api/v1";
+import {BASEURL} from '../utils/constants'
 export const requestResetPassword = async (email) => {
-  const response = await fetch(`${BASE_URL}/reset-password-token`, {
+  const response = await fetch(`${BASEURL}/reset-password-token`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: 'include', //Include cookies
@@ -10,7 +10,7 @@ export const requestResetPassword = async (email) => {
 };
 
 export const resetPassword = async (password, confirmPassword, token, email) => {
-  const response = await fetch(`${BASE_URL}/reset-password?token=${token}&email=${email}`, {
+  const response = await fetch(`${BASEURL}/reset-password?token=${token}&email=${email}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ password, confirmPassword, email }),

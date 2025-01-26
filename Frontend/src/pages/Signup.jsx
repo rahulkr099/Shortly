@@ -1,11 +1,23 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { handleError, handleSuccess } from '../../utils';
 
 function Signup() {
   const [signupInfo, setSignupInfo] = useState({ firstName: '', lastName: '', email: '', password: '', role: '' });
+  const [theme, setTheme] = useState('dark'); // Default theme is dark
   const navigate = useNavigate();
+
+  // Toggle theme between dark and light
+  const toggleTheme = () => {
+    setTheme((prevTheme) => (prevTheme === 'dark' ? 'light' : 'dark'));
+  };
+
+  // Apply theme class to the root element
+  useEffect(() => {
+    document.documentElement.classList.remove('dark', 'light');
+    document.documentElement.classList.add(theme);
+  }, [theme]);
 
   // Handle input changes
   const handleChange = (e) => {
@@ -18,14 +30,14 @@ function Signup() {
     e.preventDefault();
     const { firstName, lastName, email, password, role } = signupInfo;
 
-    if (!firstName || !lastName || !email || !password, !role) {
+    if (!firstName || !lastName || !email || !password || !role) {
       return handleError('All fields are required');
     }
 
     try {
-      const url = "http://localhost:4000/api/v1/signup"
+      const url = 'http://localhost:4000/api/v1/signup';
       const response = await fetch(url, {
-        method: "POST",
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -33,7 +45,6 @@ function Signup() {
       });
 
       const result = await response.json();
-      // console.log('result :',result)
       const { success, message, errors } = result;
 
       if (success) {
@@ -50,100 +61,147 @@ function Signup() {
   };
 
   return (
-    <div className='text-2xl p-4 flex flex-col h-screen justify-center items-center bg-auto bg-no-repeat bg-center bg-[url("/7639.jpg")]'>
-      <h1 className='text-3xl underline text-center'>Signup</h1>
-      <div>
-        <form onSubmit={handleSignup} className='flex flex-col justify-center items-start border-2 border-blue-400 m-4 p-6 rounded-lg shadow-2xl bg-gradient-to-r from-sky-400 to-indigo-300'>
-          <div className='flex flex-col'>
-            <label htmlFor='firstName' id='firstName-label'>First Name:</label>
+    <div className={`min-h-screen flex flex-col justify-center items-center transition-colors duration-300 ${theme === 'light' ? 'bg-gray-100 text-gray-900' : 'bg-gray-900 text-gray-100'}`}>
+      {/* Theme Toggle Button */}
+      <button
+        onClick={toggleTheme}
+        className={`absolute top-4 right-4 p-2 rounded-full focus:outline-none ${theme === 'light' ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'}`}
+      >
+        {theme === 'dark' ? '🌙' : '☀️'}
+      </button>
+
+      <h1 className={`text-4xl font-bold mb-8 ${theme === 'light' ? 'text-gray-900' : 'text-gray-100'}`}>Signup</h1>
+      <div className={`w-full max-w-md p-8 rounded-lg shadow-lg transition-colors duration-300 ${theme === 'light' ? 'bg-white' : 'bg-gray-800'}`}>
+        <form onSubmit={handleSignup} className='space-y-6'>
+          {/* First Name */}
+          <div>
+            <label htmlFor='firstName' className='block text-sm font-medium mb-1'>
+              First Name:
+            </label>
             <input
-              className='outline-blue-400 mt-1 mb-3 placeholder:text-2xl p-1 border-2 border-orange-400 rounded-lg'
+              className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${theme === 'light' ? 'border-gray-300 focus:ring-blue-500 bg-white' : 'border-gray-600 focus:ring-blue-400 bg-gray-700'}`}
               onChange={handleChange}
               id='firstName'
               type='text'
               name='firstName'
-              aria-labelledby='firstName-label'
-              autoFocus
               placeholder='John'
               value={signupInfo.firstName}
+              autoFocus
+              required
             />
           </div>
-          <div className='flex flex-col'>
-            <label htmlFor='lastName' id='lastName-label'>Last Name:</label>
+
+          {/* Last Name */}
+          <div>
+            <label htmlFor='lastName' className='block text-sm font-medium mb-1'>
+              Last Name:
+            </label>
             <input
-              className='outline-blue-400 mt-1 mb-3 placeholder:text-2xl p-1 border-2 border-orange-400 rounded-lg'
+              className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${theme === 'light' ? 'border-gray-300 focus:ring-blue-500 bg-white' : 'border-gray-600 focus:ring-blue-400 bg-gray-700'}`}
               onChange={handleChange}
               id='lastName'
               type='text'
               name='lastName'
-              aria-labelledby='lastName-label'
-
               placeholder='Doe'
               value={signupInfo.lastName}
+              required
             />
           </div>
-          <div className='flex flex-col'>
-            <label htmlFor='email' id='email-label'>Email</label>
+
+          {/* Email */}
+          <div>
+            <label htmlFor='email' className='block text-sm font-medium mb-1'>
+              Email:
+            </label>
             <input
-              className='outline-blue-400 mt-1 mb-3 placeholder:text-2xl p-1 border-2 border-orange-400 rounded-lg'
+              className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${theme === 'light' ? 'border-gray-300 focus:ring-blue-500 bg-white' : 'border-gray-600 focus:ring-blue-400 bg-gray-700'}`}
               onChange={handleChange}
               id='email'
               type='email'
               name='email'
-              aria-labelledby='email-label'
-
-              autoComplete='email'
               placeholder='example@mail.com'
               value={signupInfo.email}
+              autoComplete='email'
+              required
             />
           </div>
-          <div className='flex flex-col'>
-            <label htmlFor='password' id='password-label'>Password</label>
+
+          {/* Password */}
+          <div>
+            <label htmlFor='password' className='block text-sm font-medium mb-1'>
+              Password:
+            </label>
             <input
-              className='outline-blue-400 mt-1 mb-2 placeholder:text-2xl p-1 border-2 border-orange-400 rounded-lg'
+              className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${theme === 'light' ? 'border-gray-300 focus:ring-blue-500 bg-white' : 'border-gray-600 focus:ring-blue-400 bg-gray-700'}`}
               onChange={handleChange}
               id='password'
               type='password'
               name='password'
-              aria-labelledby='password-label'
-
-              autoComplete='current-password'
               placeholder='At least 6 characters'
               value={signupInfo.password}
+              autoComplete='current-password'
+              required
             />
-          </div>
-          <div>
-            <h5>Role: </h5>
-            <input
-              type="radio"
-              name="role"
-              id="user"
-              value="user"
-              onChange={handleChange}
-              checked={signupInfo.role === 'user'}
-            />
-            <label htmlFor="user"> User </label>
-            <input
-              type="radio"
-              name="role"
-              id="admin"
-              value="admin"
-              onChange={handleChange}
-              checked={signupInfo.role === 'admin'}
-            />
-            <label htmlFor="admin"> Admin </label>
           </div>
 
-          <div className='w-full text-center'>
-            <button type='submit' className='text-white m-1 border border-green-400 rounded-lg p-1 bg-green-400 hover:text-black'>Signup</button>
+          {/* Role Selection */}
+          <div>
+            <h5 className='block text-sm font-medium mb-2'>Role:</h5>
+            <div className='flex space-x-4'>
+              <label className='flex items-center'>
+                <input
+                  type='radio'
+                  name='role'
+                  id='user'
+                  value='user'
+                  onChange={handleChange}
+                  checked={signupInfo.role === 'user'}
+                  className='mr-2'
+                />
+                User
+              </label>
+              <label className='flex items-center'>
+                <input
+                  type='radio'
+                  name='role'
+                  id='admin'
+                  value='admin'
+                  onChange={handleChange}
+                  checked={signupInfo.role === 'admin'}
+                  className='mr-2'
+                />
+                Admin
+              </label>
+            </div>
           </div>
-          <span>Already Have an account?
-            <Link to='/login' className='hover:text-white'> Login</Link>
-          </span>
+
+          {/* Submit Button */}
+          <div className='w-full text-center'>
+            <button
+              type='submit'
+              className={`w-full py-2 px-4 rounded-md font-semibold ${theme === 'light' ? 'bg-blue-500 hover:bg-blue-600 text-white' : 'bg-blue-600 hover:bg-blue-700 text-white'}`}
+            >
+              Signup
+            </button>
+          </div>
+
+          {/* Login Link */}
+          <div className='text-center'>
+            <span className='text-sm'>
+              Already have an account?{' '}
+              <Link
+                to='/login'
+                className={`font-semibold ${theme === 'light' ? 'text-blue-600 hover:text-blue-800' : 'text-blue-400 hover:text-blue-300'}`}
+              >
+                Login
+              </Link>
+            </span>
+          </div>
         </form>
       </div>
       <ToastContainer />
     </div>
   );
 }
+
 export default Signup;

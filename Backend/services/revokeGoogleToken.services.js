@@ -1,5 +1,4 @@
 
-
 export const revokeGoogleToken = async (req, res) => {
   try {
     const accessToken =

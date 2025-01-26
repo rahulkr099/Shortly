@@ -5,14 +5,20 @@ dotenv.config();
 
 export const auth = (req, res, next) => {
   try {
+    let googleToken;
     // Retrieve token from request body, cookies, or headers
     const token =
       req?.cookies?.accessToken ||
       req?.body?.accessToken ||
       req?.headers?.["authorization"]?.replace("Bearer ", "");
 
+    if(!token){
+       googleToken = req?.body?.googleMiddlewareToken || req?.cookies?.googleMiddlewareToken;
+       console.log('googleMiddlewareToken',googleToken)
+    }
+
     // Check if the token is missing
-    if (!token) {
+    if (!googleToken && !token) {
       return res.status(401).json({
         success: false,
         message: "Token is missing. Please provide a valid token.",
@@ -21,8 +27,13 @@ export const auth = (req, res, next) => {
 
     // Verify the token
     try {
-      const decode = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-      // console.log(decode);
+      let decode;
+      if(token){
+       decode = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+      }else{
+        decode = jwt.verify(googleToken, process.env.Google_Middleware_TOKEN_SECRET);
+      }
+      console.log(decode);
       if (!decode) {
         return res
           .status(401)

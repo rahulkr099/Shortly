@@ -1,101 +1,139 @@
 // Import the URL model for database interactions
-import URL from '../models/url.model';
-import { nanoid } from 'nanoid';
+import URL from "../models/url.model.js";
+import { nanoid } from "nanoid";
 
 
-// Generate a new short URL
-export async function handleGenerateNewShortURL(req, res) {
+// async function createUrl(userId, redirectURL, customUrl = null) {
+//   try {
+//     const shortUrl = await URL.createShortUrl({
+//       userId,
+//       redirectURL,
+//       customUrl,
+//     });
+//     console.log("Short URL created:", shortUrl);
+//   } catch (error) {
+//     console.error("Error creating short URL:", error.message);
+//   }
+// }
+
+export async function handleUserAnalytics(req, res) {
   try {
-    const { url, customNanoId } = req.body;
-    // console.log('url and customId',url,customNanoId);
-    // console.log('request object is',req);
-
     const userId = req.user.id;
 
-    // Validate the URL
-    if (!url) return res.status(400).json({ error: 'URL is required' });
+    const urlEntry = await URL.find({ userId });
+    if (!urlEntry)
+      return res.status(404).json({ error: "URL not found for this user" });
+    console.log("urlEntry of user status", urlEntry);
+    // Respond with analytics
+    return res.status(200).json({
+      urlEntry,
+      message: "your analytics",
+    });
+  } catch (error) {
+    console.error("Error fetching analytics:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+}
 
-    const urlPattern = new RegExp(
-      '^(https?:\\/\\/)?' + // protocol
-      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*))' + // domain name
-      '(\\.[a-z]{2,})+|' + // domain extension
-      '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR IP (v4) address
-      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
-      '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-      '(\\#[-a-z\\d_]*)?$', // fragment locator
-      'i'
-    );
-    if (!urlPattern.test(url)) {
-      return res.status(400).json({ error: 'Invalid URL format' });
+
+export async function handleShortenURL(req, res) {
+  try {
+    const { url, customNanoId } = req.body; // Extract original URL and optional custom ID
+    const userId = req.user.id; // Get the authenticated user's ID
+
+    // let userObjectId;
+    // if (mongoose.Types.ObjectId.isValid(userId)) {
+    //   userObjectId = new mongoose.Types.ObjectId(userId);
+    // } else {
+    //   // If userId is not a valid ObjectId, handle it appropriately
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: "Invalid userId format. Please provide a valid ObjectId.",
+    //   });
+    // }
+
+    console.log('customNanoid',customNanoId);
+    // Validate the URL
+    if (!url) {
+      return res.status(400).json({ error: "URL is required" });
     }
 
-    // Check if the URL already exists
-    const existingEntry = await URL.findOne({ redirectURL: url });
-    if (existingEntry) {
+    const urlPattern = new RegExp(
+      "^(https?:\\/\\/)?((([a-z\\d]([a-z\\d-]*[a-z\\d])*))" +
+        "(\\.[a-z]{2,})+|((\\d{1,3}\\.){3}\\d{1,3}))(:\\d+)?(\\/[-a-z\\d%_.~+]*)*" +
+        "(\\?[;&a-z\\d%_.~+=-]*)?(\\#[-a-z\\d_]*)?$",
+      "i"
+    );
+    if (!urlPattern.test(url)) {
+      return res.status(400).json({ error: "Invalid URL format" });
+    }
+
+    // Check if the original URL already exists
+    const existingUrl = await URL.findOne({ redirectURL: url});
+    if (existingUrl) {
       return res.status(200).json({
-        id: existingEntry.nanoId,
-        shortUrl: `${process.env.BASE_URL || 'http://localhost:4000'}/${existingEntry.nanoId}`,
-        message: 'URL already shortened',
+        id: existingUrl.nanoId,
+        shortUrl: `${process.env.BASE_URL || "http://localhost:4000"}/${
+          existingUrl.nanoId
+        }`,
+        message: "URL already shortened",
       });
     }
 
-    // Generate or use a custom nano ID
+    // Generate or validate the custom ID
     const nanoID = customNanoId || nanoid();
-    console.log('nanoId',nanoID);
-    // Ensure custom ID is unique
     if (customNanoId) {
-      const idExists = await URL.findOne({ nanoId: customNanoId, userId });
-      if (idExists) {
-        return res.status(400).json({ error: 'Custom nano ID already exists for this user' });
+      const existingCustomId = await URL.findOne({ nanoId: customNanoId });
+      if (existingCustomId) {
+        return res.status(400).json({ error: "Custom URL already exists" });
       }
     }
 
-    // Create a new URL entry in the database
-    const newEntry = await URL.create({
+    // Create a new URL urlEntry
+    const newUrl = await URL.create({
       userId,
       nanoId: nanoID,
       redirectURL: url,
-    //   visitHistory: [],
-    //   totalClicks: 0,
-    //   lastVisited: null,
     });
 
-    // Respond with the short URL
-    const baseUrl = process.env.BASE_URL || 'http://localhost:4000';
+    // Respond with the shortened URL
     return res.status(201).json({
       id: nanoID,
-      shortUrl: `${baseUrl}/${nanoID}`,
-      message: 'Short URL generated successfully',
+      shortUrl: `${process.env.BASE_URL || "http://localhost:4000"}/${nanoID}`,
+      message: "Short URL generated successfully",
     });
   } catch (error) {
-    console.error('Error generating short URL:', error);
-    return res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error generating short URL:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 }
+
 
 // Get analytics for a short URL
 export async function handleGetAnalytics(req, res) {
   try {
-    const { nanoId } = req.params;
-    const userId = req.user.id;
-
+    const { nanoId } =  req.params;
+    // const userId = req.user.id;
+    // console.log("Received nanoId:", nanoId);
     // Validate nanoId
-    if (!nanoId) return res.status(400).json({ error: 'Nano ID is required' });
+    if (!nanoId) return res.status(400).json({ error: "Nano ID is required" });
 
-    // Fetch the URL entry
-    const entry = await URL.findOne({ nanoId,userId });
-    if (!entry) return res.status(404).json({ error: 'URL not found for this user' });
+    // Fetch the URL urlEntry
+    const urlEntry = await URL.findOne({ nanoId });
+    if (!urlEntry)
+      return res.status(404).json({ error: "URL not found for this user" });
 
     // Respond with analytics
     return res.status(200).json({
-      nanoId: entry.nanoId,
-      totalClicks: entry.totalClicks,
-      lastVisited: entry.lastVisited,
-      visitHistory: entry.visitHistory,
+      nanoId: urlEntry.nanoId,
+      redirectUrl: urlEntry.redirectURL,
+      totalClicks: urlEntry.totalClicks,
+      lastVisited: urlEntry.lastVisited,
+      visitHistory: urlEntry.visitHistory,
     });
   } catch (error) {
-    console.error('Error fetching analytics:', error);
-    return res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error fetching analytics:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 }
 
@@ -103,25 +141,24 @@ export async function handleGetAnalytics(req, res) {
 export async function handleRedirect(req, res) {
   try {
     const { nanoId } = req.params;
-    const userId = req.user.id;
-
+    
     // Validate nanoId
-    if (!nanoId) return res.status(400).json({ error: 'Nano ID is required' });
+    if (!nanoId) return res.status(400).json({ error: "Nano ID is required" });
 
-    // Fetch the URL entry
-    const entry = await URL.findOne({ nanoId, userId });
-    if (!entry) return res.status(404).json({ error: 'URL not found' });
+    // Fetch the URL urlEntry
+    const urlEntry = await URL.findOne({ nanoId });
+    if (!urlEntry) return res.status(404).json({ error: "URL not found" });
 
     // Update visit history and analytics
-    entry.visitHistory.push({ timestamp: new Date() });
-    entry.totalClicks += 1;
-    entry.lastVisited = new Date();
-    await entry.save();
+    urlEntry.visitHistory.push({ timestamp: new Date() });
+    urlEntry.totalClicks += 1;
+    urlEntry.lastVisited = new Date();
+    await urlEntry.save();
 
     // Redirect to the original URL
-    return res.redirect(entry.redirectURL);
+    return res.redirect(urlEntry.redirectURL);
   } catch (error) {
-    console.error('Error during redirect:', error);
-    return res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error during redirect:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 }

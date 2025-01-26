@@ -13,3 +13,8 @@ export const generateRefreshToken = (payload) => {
         expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
     })
 }
+export const generateGoogleMiddlewareToken = (payload) => {
+    return jwt.sign(payload,process.env.Google_Middleware_TOKEN_SECRET,{
+        expiresIn: process.env.Google_Middleware_TOKEN_EXPIRY,
+    })
+}

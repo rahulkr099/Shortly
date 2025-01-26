@@ -1,57 +1,52 @@
-// Import the Mongoose library for MongoDB interactions
 import mongoose from "mongoose";
-
 import { nanoid } from "nanoid";
 
-// Define a new Mongoose schema for storing URL data
+// Define schema for URL shortening
 const urlSchema = new mongoose.Schema(
-  { 
-    userId:{
+  {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
-      required:true,
-      ref:"User",
+      required: true,
+      ref: "User",
     },
-    // Unique identifier for the shortened URL
+    // Unique identifier for the shortened URL (can be custom)
     nanoId: {
-      type: String, // Data type for nanoId
-      required: true, // Ensure nanoId is always provided
-      unique: true, // Prevent duplicate nanoIds
-      index: true, // Add an index for faster lookups
+      type: String,
+      required: true,
+      unique: true,
+      index: true,
       default: () => nanoid(),
     },
-    // Original URL to redirect to
+    // Original URL
     redirectURL: {
-      type: String, // Data type for redirectURL
-      required: true, // Ensure redirectURL is always provided
+      type: String,
+      required: true,
       unique: true,
-      message: "Invalid URL format",
     },
-    // Record of visits with timestamps
+    // History of visits
     visitHistory: [
       {
         timestamp: {
-          type: Date, // Use Date for visit timestamp
-          default: Date.now, // Default to current date/time
+          type: Date,
+          default: Date.now,
         },
       },
     ],
-    // Total number of clicks for this short URL
+    // Click stats
     totalClicks: {
       type: Number,
-      default: 0, // Default to 0 clicks
+      default: 0,
     },
-    // Timestamp of the last visit
+    // Last visit timestamp
     lastVisited: {
       type: Date,
     },
   },
   {
-    timestamps: true, // Automatically add createdAt and updatedAt fields
+    timestamps: true, // Automatically add `createdAt` and `updatedAt` fields
   }
 );
 
-// Create a Mongoose model named "URL" based on the urlSchema
 const URL = mongoose.model("URL", urlSchema);
 
-// Export the URL model for use in other files
 export default URL;

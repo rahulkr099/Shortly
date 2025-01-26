@@ -1,7 +1,7 @@
-const BASE_URL = 'http://localhost:4000/api/v1';
+import { BASEURL } from "../utils/constants";
 export const googleAuth = async (code) => {
   try {
-    const response = await fetch(`${BASE_URL}/google/auth?code=${code}`, {
+    const response = await fetch(`${BASEURL}/google/auth?code=${code}`, {
       method: 'GET',
       credentials: 'include',
     });

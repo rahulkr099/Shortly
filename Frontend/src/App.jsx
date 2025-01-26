@@ -41,12 +41,12 @@ function App() {
       
       <Routes>
         {/* Redirect root path to login */}
-        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/" element={<Navigate to="/home" replace />} />
 
         {/* Protected route for authenticated users */}
         <Route
           path="/home"
-          element={<PrivateRoute element={<Home isAuthenticated={isAuthenticated} isGoogleAuth={isGoogleAuth}/>} isAuthenticated={isAuthenticated} isGoogleAuth={isGoogleAuth}/>}
+          element={<Home isAuthenticated={isAuthenticated} isGoogleAuth={isGoogleAuth}/>} 
         />
         
         {/* Public routes for Login and Signup */}

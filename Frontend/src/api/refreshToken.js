@@ -1,11 +1,12 @@
-// refreshToken.js
+import { BASEURL } from "../utils/constants";
 
+// refreshToken.js
 const refreshToken = async (type) => {
-  const BASE_URL = "http://localhost:4000/api/v1";
+  
   const endpoint = type === "google" ? "/google/auth/refresh" : "/refresh-token";
 
   try {
-    const response = await fetch(`${BASE_URL}${endpoint}`, {
+    const response = await fetch(`${BASEURL}${endpoint}`, {
       method: type === "google" ? "GET" : "POST",
       credentials: "include",
     });

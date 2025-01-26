@@ -1,10 +1,10 @@
-import User from "../models/user.model";
+import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
-import { passwordUpdated } from "../mail/passwordUpdate";
+import { passwordUpdated } from "../mail/passwordUpdate.js";
 import dotenv from 'dotenv'
 dotenv.config();
-import {mailSender} from "../utils/mailSender";
+import {mailSender} from "../utils/mailSender.js";
 
 export const resetPasswordToken = async (req, res) => {
   try {

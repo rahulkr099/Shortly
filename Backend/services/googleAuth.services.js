@@ -1,6 +1,6 @@
 
 // import refreshGoogleToken from ("../utils/refreshGoogleToken")
-import { oauth2Client } from "../utils/oauth2Client";
+import { oauth2Client } from "../utils/oauth2Client.js";
 
 export const checkGoogleAccessToken = async (req, res) => {
   try {

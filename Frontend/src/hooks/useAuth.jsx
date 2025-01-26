@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import fetchWithAuth from '../api/fetchWithAuth';
 import refreshToken from '../api/refreshToken';
+import { BASEURL } from '../utils/constants';
 
 const useAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -9,7 +10,7 @@ const useAuth = () => {
     const checkLoginStatus = async () => {
       localStorage.getItem('accessToken');
 
-      const response = await fetchWithAuth(`http://localhost:4000/api/v1/auth/status`, {
+      const response = await fetchWithAuth(`${BASEURL}/auth/status`, {
         method: 'POST',
         credentials: 'include', // To include cookies if needed
         headers: {

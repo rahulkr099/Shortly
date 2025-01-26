@@ -9,7 +9,6 @@ import {auth} from './middlewares/auth.middleware.js';
 import urlRoutes from './routes/url.routes.js';
 import dotenv from 'dotenv';
 //2. Load environment variables
-
 dotenv.config();
 const PORT = process.env.PORT || 3000;
 
@@ -34,15 +33,15 @@ app.use(
       contentSecurityPolicy: {
         directives: {
           defaultSrc: ["'self'"],
-          scriptSrc: ["'self'", "http://localhost:5173"],
-          connectSrc: ["'self'", "http://localhost:4000"],
+          scriptSrc: ["'self'",process.env.FRONTEND_URL, "http://localhost:5173"],
+          connectSrc: ["'self'",process.env.BACKEND_URL, "http://localhost:4000"],
         },
       },
       crossOriginEmbedderPolicy: false, // Disable if interfering
     })
   );//Set secure HTTP headers
 app.use(cors({
-    origin: 'http://localhost:5173', // Specify your frontend's origin
+    origin: ['http://localhost:5173', process.env.FRONTEND_URL], // Specify your frontend's origin
   credentials: true, // Allow credentials (cookies, etc.)
 }));
 
@@ -55,7 +54,7 @@ const limiter = rateLimit({
         message:"Too many requests, please try again later.",
     }
 });
-app.use(limiter);
+// app.use(limiter);
 
 //8. Define routes
 app.use("/api/v1",userRoutes);
@@ -63,7 +62,7 @@ app.use("/",auth,urlRoutes);
 
 //9. Health check route
 app.get("/ping", (req, res) => {
-    return res.send('<h1 style="color:red;">PONG</h1>'); 
+    return res.send('<h1 style="color:red; font-size:200px;">PONG</h1>'); 
 });
 
 //10. Handle undefined routes

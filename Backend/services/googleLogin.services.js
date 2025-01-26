@@ -1,7 +1,8 @@
 import fetch from "node-fetch";
-import { oauth2Client } from "../utils/oauth2Client";
-import User from "../models/user.model";
+import { oauth2Client } from "../utils/oauth2Client.js";
+import User from "../models/user.model.js";
 import dotenv from 'dotenv';
+import { generateGoogleMiddlewareToken } from "../utils/generateToken.js";
 dotenv.config();
 /* GET Google Authentication API */
 export const googleLogin = async (req, res) => {
@@ -16,7 +17,7 @@ export const googleLogin = async (req, res) => {
   try {
     // Step 1: Exchange authorization code for access tokens
     const googleRes = await oauth2Client.getToken(code);
-    // console.log('tokens in googlecontroller:',googleRes)
+    console.log('tokens in googlecontroller:',googleRes)
     oauth2Client.setCredentials(googleRes.tokens);
 
     // Step 2: Fetch user info from Google API
@@ -54,9 +55,17 @@ export const googleLogin = async (req, res) => {
     // console.log("googleAccessToken", googleAccessToken);
     const googleRefreshToken = googleRes.tokens.refresh_token;
     // console.log('googleRefreshToken',googleRefreshToken);
-    
+    const id_token = googleRes.tokens.id_token;
+
+    const googleMiddlewareToken = generateGoogleMiddlewareToken({
+          firstName:user.firstName,
+          lastName:user.lastName,
+          email: user.email,
+          id: user._id,
+          role: user.role,
+        });
     const cookieOptions = {
-      expires: new Date(Date.now() + 30 * 60 * 1000), //30 min
+      expires: new Date(Date.now() + 12 * 60 * 60 * 1000), //12 hr
       httpOnly: true,
     };
     // Step 5: Send the response
@@ -64,6 +73,8 @@ export const googleLogin = async (req, res) => {
       .status(200)
       .cookie("googleAccessToken", googleAccessToken, cookieOptions)
       .cookie("googleRefreshToken",googleRefreshToken,cookieOptions)
+      .cookie("googleMiddlewareToken",googleMiddlewareToken,cookieOptions)
+      // .cookie("id_token",id_token,cookieOptions) //used for google auth middleware
       .json({
         success: true,
         message: "Authentication successful",
