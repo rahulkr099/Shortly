@@ -1,7 +1,8 @@
 // Import the URL model for database interactions
 import URL from "../models/url.model.js";
 import { nanoid } from "nanoid";
-
+import dotenv from 'dotenv'
+dotenv.config();
 
 // async function createUrl(userId, redirectURL, customUrl = null) {
 //   try {
