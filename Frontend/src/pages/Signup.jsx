@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { useState,useEffect } from 'react';
 import { handleError, handleSuccess } from '../../utils';
+import { BASEURL } from '../utils/constants';
 
 function Signup() {
   const [signupInfo, setSignupInfo] = useState({ firstName: '', lastName: '', email: '', password: '', role: '' });
@@ -35,7 +36,7 @@ function Signup() {
     }
 
     try {
-      const url = 'http://localhost:4000/api/v1/signup';
+      const url = `${BASEURL}/api/v1/signup`;
       const response = await fetch(url, {
         method: 'POST',
         headers: {
