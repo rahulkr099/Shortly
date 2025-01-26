@@ -25,7 +25,7 @@ import {connect} from './config/database.js'
 connect();
 
 // Set proxy trust (required for secure cookies on Render)
-app.set("trust proxy", true);
+// app.set("trust proxy", true);
 
 //6. Use middleware
 app.use(express.json());//Parse JSON payloads
