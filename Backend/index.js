@@ -43,11 +43,18 @@ app.use(express.urlencoded({ extended: true }));//Parse URL-encoded payloads
 //       crossOriginEmbedderPolicy: true, // Disable if interfering
 //     })
 //   );//Set secure HTTP headers
-app.use(cors({
-    origin: ['http://localhost:5173','https://shortly-frontend.onrender.com', process.env.FRONTEND_URL], // Specify your frontend's origin
-  credentials: true, // Allow credentials (cookies, etc.)
-}));
-
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://shortly-frontend.onrender.com",
+      process.env.FRONTEND_URL,
+    ],
+    credentials: true, // Allows cookies to be sent with requests
+    methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed HTTP methods
+    allowedHeaders: ["Content-Type", "Authorization"], // Include custom headers
+  })
+);
 //7. Rate Limiting
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, //15 min
