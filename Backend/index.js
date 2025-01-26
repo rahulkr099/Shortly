@@ -34,14 +34,14 @@ app.use(
         directives: {
           defaultSrc: ["'self'"],
           scriptSrc: ["'self'",process.env.FRONTEND_URL, "http://localhost:5173"],
-          connectSrc: ["'self'",process.env.BACKEND_URL, "http://localhost:4000"],
+          connectSrc: ["'self'",process.env.BACKEND_URL,'https://shortly-frontend.onrender.com', "http://localhost:4000"],
         },
       },
       crossOriginEmbedderPolicy: false, // Disable if interfering
     })
   );//Set secure HTTP headers
 app.use(cors({
-    origin: ['http://localhost:5173', process.env.FRONTEND_URL], // Specify your frontend's origin
+    origin: ['http://localhost:5173','https://shortly-frontend.onrender.com', process.env.FRONTEND_URL], // Specify your frontend's origin
   credentials: true, // Allow credentials (cookies, etc.)
 }));
 

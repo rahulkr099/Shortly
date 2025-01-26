@@ -6,7 +6,7 @@ export const checkGoogleAccessToken = async (req, res) => {
   try {
     const accessToken =
       req?.cookies?.googleAccessToken || req?.body?.googleAccessToken;
-    console.log("accessToken in checkGoogleAccessToken", accessToken);
+    // console.log("accessToken in checkGoogleAccessToken", accessToken);
     if (!accessToken) {
       return res.status(401).json({
         success: false,
@@ -35,7 +35,7 @@ export const checkGoogleAccessToken = async (req, res) => {
       }
 
       userData = await userRes.json();
-      console.log("User Data:", userData);
+      // console.log("User Data:", userData);
     } catch (error) {
       console.error("Google accessToken is expired", error);
      return res.status(401).json({
@@ -76,7 +76,7 @@ export const authenticateGoogleRequest = async (req, res) => {
     // Refresh access token using the provided refresh token
     const newTokens = await refreshGoogleToken(incomingRefreshToken);
 
-    console.log("Access token is refreshed:", newTokens);
+    // console.log("Access token is refreshed:", newTokens);
     const cookieOptions = {
       expires: new Date(Date.now() + 24 * 60 * 60 * 1000), //1 days
       httpOnly: true,
@@ -111,7 +111,7 @@ const refreshGoogleToken = async (refreshToken) => {
     oauth2Client.setCredentials({ refresh_token: refreshToken });
 
     const { credentials } = await oauth2Client.refreshAccessToken();
-    console.log("New credentials received:", credentials);
+    // console.log("New credentials received:", credentials);
 
     return credentials; // Contains new access token and expiration time
   } catch (error) {

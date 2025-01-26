@@ -52,7 +52,7 @@ export async function handleShortenURL(req, res) {
     //   });
     // }
 
-    console.log('customNanoid',customNanoId);
+    // console.log('customNanoid',customNanoId);
     // Validate the URL
     if (!url) {
       return res.status(400).json({ error: "URL is required" });

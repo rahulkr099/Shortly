@@ -7,7 +7,7 @@ dotenv.config();
 /* GET Google Authentication API */
 export const googleLogin = async (req, res) => {
   const code = req.query.code;
-  console.log("backend google controller:", code);
+  // console.log("backend google controller:", code);
   if (!code) {
     return res.status(400).json({
       message: "Authorization code is missing",
@@ -17,7 +17,7 @@ export const googleLogin = async (req, res) => {
   try {
     // Step 1: Exchange authorization code for access tokens
     const googleRes = await oauth2Client.getToken(code);
-    console.log('tokens in googlecontroller:',googleRes)
+    // console.log('tokens in googlecontroller:',googleRes)
     oauth2Client.setCredentials(googleRes.tokens);
 
     // Step 2: Fetch user info from Google API
