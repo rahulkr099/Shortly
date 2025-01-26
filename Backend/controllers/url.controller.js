@@ -74,7 +74,7 @@ export async function handleShortenURL(req, res) {
     if (existingUrl) {
       return res.status(200).json({
         id: existingUrl.nanoId,
-        shortUrl: `${process.env.BASE_URL || "http://localhost:4000"}/${
+        shortUrl: `${process.env.BASE_URL || "http://localhost:4000"}/url/${
           existingUrl.nanoId
         }`,
         message: "URL already shortened",
@@ -100,7 +100,7 @@ export async function handleShortenURL(req, res) {
     // Respond with the shortened URL
     return res.status(201).json({
       id: nanoID,
-      shortUrl: `${process.env.BASE_URL || "http://localhost:4000"}/${nanoID}`,
+      shortUrl: `${process.env.BASE_URL || "http://localhost:4000"}/url/${nanoID}`,
       message: "Short URL generated successfully",
     });
   } catch (error) {
