@@ -44,20 +44,28 @@ app.use(express.urlencoded({ extended: true }));//Parse URL-encoded payloads
 //     })
 //   );//Set secure HTTP headers
 app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      "https://shortly-frontend.onrender.com",
-      "https://shortly-f-rahul-kumars-projects-cdeca0dc.vercel.app/",
-      process.env.FRONTEND_URL,
-    ],
-    credentials: true, // Allows cookies to be sent with requests
-    methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed HTTP methods
-    allowedHeaders: ["Content-Type", "Authorization"], // Include custom headers
-  })
-);
+    cors({
+      origin: function (origin, callback) {
+        const allowedOrigins = [
+          "http://localhost:5173",
+          "https://shortly-frontend.onrender.com",
+          "https://shortly-f-rahul-kumars-projects-cdeca0dc.vercel.app/",
+          process.env.FRONTEND_URL,
+        ];
+        if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error("Not allowed by CORS"));
+        }
+      },
+      credentials: true,
+      methods: ["GET", "POST", "PUT", "DELETE"],
+      allowedHeaders: ["Content-Type", "Authorization"],
+    })
+  );
+  
 // Preflight request handling
-// app.options('*', cors());
+app.options('*', cors());
 //7. Rate Limiting
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, //15 min
