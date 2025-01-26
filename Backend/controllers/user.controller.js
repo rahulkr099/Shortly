@@ -143,7 +143,7 @@ export const login = async (req, res) => {
     };
     //7.Set token as an HTTP-only cookie
     const cookieOptions = {
-      domain:"shortly-klp2.onrender.com",
+      domain:"shortly-frontend.onrender.com",
       expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), //3 days
       httpOnly: true,
       sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
