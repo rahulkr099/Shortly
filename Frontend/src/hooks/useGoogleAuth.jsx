@@ -16,7 +16,7 @@ const useGoogleAuth = () => {
       }, "google")
 
       const googleData = await googleRes.json();
-      // console.log('googleData on frontend:', googleData)
+      console.log('googleData on frontend:', googleData)
       if (googleData.success) {
         setIsGoogleAuth(true);
       } else {

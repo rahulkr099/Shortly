@@ -9,7 +9,7 @@ const useAuth = () => {
   useEffect(() => {
     const checkLoginStatus = async () => {
       localStorage.getItem('accessToken');
-
+    
       const response = await fetchWithAuth(`${BASEURL}/auth/status`, {
         method: 'POST',
         credentials: 'include', // To include cookies if needed
@@ -20,7 +20,7 @@ const useAuth = () => {
       }, "notgoogle");
 
       const data = await response.json(); // Parse response as JSON
-      // console.log('Response from useAuth.jsx:', data);
+      console.log('Response from useAuth.jsx:', data);
       // console.log('useAuth"s message:', data.message);
       if (response.ok && data.success) {
         // setIsAuthenticated(!!accessToken); // Set true if accessToken exists
@@ -38,7 +38,7 @@ const useAuth = () => {
         setIsAuthenticated(false);
         clearInterval(refreshInterval);
       }
-    }, 4 * 60 * 1000); // Refresh token every 4 minutes
+    }, 40 * 60 * 1000); // Refresh token every 40 minutes
     return () => clearInterval(refreshInterval);
   }, []);
   

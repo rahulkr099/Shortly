@@ -145,8 +145,8 @@ export const login = async (req, res) => {
     const cookieOptions = {
       expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), //3 days
       httpOnly: true,
-      sameSite: 'None',
-      secure: true // Only if your site has HTTPS
+      sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+      secure: process.env.NODE_ENV === 'production'
     };
     //8.set the cookie and send response
     return res

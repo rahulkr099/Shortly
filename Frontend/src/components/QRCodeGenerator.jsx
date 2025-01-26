@@ -12,7 +12,7 @@ const QRCodeGenerator = ({ url }) => {
       return;
     }
     try {
-      const response = await fetch(`${URL}/generate-qr`, {
+      const response = await fetch(`${URL}/url/generate-qr`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
