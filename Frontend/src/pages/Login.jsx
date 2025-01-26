@@ -6,6 +6,7 @@ import { useState } from "react";
 import { handleError, handleSuccess } from "../../utils";
 import PropTypes from 'prop-types';
 import GoogleLogin from "./GoogleLogin";
+import { BASEURL } from "../utils/constants";
 
 function Login({ setIsAuthenticated, GoogleAuthWrapper }) {
   const [loginInfo, setLoginInfo] = useState({ email: "", password: "" });
@@ -30,7 +31,7 @@ function Login({ setIsAuthenticated, GoogleAuthWrapper }) {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:4000/api/v1/login", {
+      const response = await fetch(`${BASEURL}/api/v1/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: 'include',
