@@ -36,7 +36,7 @@ function Signup() {
     }
 
     try {
-      const url = `${BASEURL}/api/v1/signup`;
+      const url = `${BASEURL}/signup`;
       const response = await fetch(url, {
         method: 'POST',
         headers: {

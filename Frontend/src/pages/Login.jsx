@@ -31,7 +31,7 @@ function Login({ setIsAuthenticated, GoogleAuthWrapper }) {
     setLoading(true);
 
     try {
-      const response = await fetch(`${BASEURL}/api/v1/login`, {
+      const response = await fetch(`${BASEURL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: 'include',
