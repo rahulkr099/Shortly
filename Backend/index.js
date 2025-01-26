@@ -48,6 +48,7 @@ app.use(
     origin: [
       "http://localhost:5173",
       "https://shortly-frontend.onrender.com",
+      "https://shortly-f-rahul-kumars-projects-cdeca0dc.vercel.app/",
       process.env.FRONTEND_URL,
     ],
     credentials: true, // Allows cookies to be sent with requests
