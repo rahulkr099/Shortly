@@ -31,18 +31,18 @@ app.set("trust proxy", 1);
 app.use(express.json());//Parse JSON payloads
 app.use(cookieParser());//Parse cookies
 app.use(express.urlencoded({ extended: true }));//Parse URL-encoded payloads
-app.use(
-    helmet({
-      contentSecurityPolicy: {
-        directives: {
-          defaultSrc: ["'self'"],
-          scriptSrc: ["'self'",process.env.FRONTEND_URL, "http://localhost:5173"],
-          connectSrc: ["'self'",process.env.BACKEND_URL,'https://shortly-frontend.onrender.com', "http://localhost:4000"],
-        },
-      },
-      crossOriginEmbedderPolicy: false, // Disable if interfering
-    })
-  );//Set secure HTTP headers
+// app.use(
+//     helmet({
+//       contentSecurityPolicy: {
+//         directives: {
+//           defaultSrc: ["'self'"],
+//           scriptSrc: ["'self'",process.env.FRONTEND_URL, "http://localhost:5173"],
+//           connectSrc: ["'self'",process.env.BACKEND_URL,'https://shortly-frontend.onrender.com', "http://localhost:4000"],
+//         },
+//       },
+//       crossOriginEmbedderPolicy: true, // Disable if interfering
+//     })
+//   );//Set secure HTTP headers
 app.use(cors({
     origin: ['http://localhost:5173','https://shortly-frontend.onrender.com', process.env.FRONTEND_URL], // Specify your frontend's origin
   credentials: true, // Allow credentials (cookies, etc.)
