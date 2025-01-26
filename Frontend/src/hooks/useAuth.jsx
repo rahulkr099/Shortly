@@ -8,7 +8,7 @@ const useAuth = () => {
 
   useEffect(() => {
     const checkLoginStatus = async () => {
-      localStorage.getItem('accessToken');
+      // localStorage.getItem('accessToken');
     
       const response = await fetchWithAuth(`${BASEURL}/auth/status`, {
         method: 'POST',
