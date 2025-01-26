@@ -10,8 +10,8 @@ const Navbar = ({ isAuthenticated, setIsAuthenticated, isGoogleAuth, setIsGoogle
       if (!isGoogleAuth && !isAuthenticated) return;
 
       const url = isGoogleAuth
-        ? `${BASEURL}/api/v1/google/auth/revoke`
-        : `${BASEURL}/api/v1/logout`;
+        ? `${BASEURL}/google/auth/revoke`
+        : `${BASEURL}/logout`;
 
       const response = await fetch(url, {
         method: "POST",
