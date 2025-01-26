@@ -148,8 +148,11 @@ export const login = async (req, res) => {
       sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
       secure: process.env.NODE_ENV === 'production'
     };
+    console.log("Setting cookies...");
+console.log("Access Token Cookie Options:", cookieOptions);
+console.log("Refresh Token Cookie Options:", cookieOptions);
     //8.set the cookie and send response
-     res
+    return res
       .status(200)
       .cookie("accessToken", accessToken, cookieOptions)
       .cookie("refreshToken", refreshToken, cookieOptions)
