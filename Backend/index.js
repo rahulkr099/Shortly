@@ -25,7 +25,7 @@ import {connect} from './config/database.js'
 connect();
 
 // Set proxy trust (required for secure cookies on Render)
-app.set("trust proxy", 1);
+app.set("trust proxy", true);
 
 //6. Use middleware
 app.use(express.json());//Parse JSON payloads
@@ -56,7 +56,7 @@ app.use(
   })
 );
 // Preflight request handling
-app.options('*', cors());
+// app.options('*', cors());
 //7. Rate Limiting
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, //15 min
