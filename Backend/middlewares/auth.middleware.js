@@ -11,19 +11,21 @@ export const auth = (req, res, next) => {
       req?.cookies?.accessToken ||
       req?.body?.accessToken ||
       req?.headers?.["authorization"]?.replace("Bearer ", "");
-
+      console.log('tokein in authMidleware.js',token)
     if(!token){
        googleToken = req?.body?.googleMiddlewareToken || req?.cookies?.googleMiddlewareToken;
-       console.log('googleMiddlewareToken',googleToken)
+      //  console.log('googleMiddlewareToken',googleToken)
+
+      // Check if the token is missing
+    // if (!googleToken && !token) {
+    //   return res.status(401).json({
+    //     success: false,
+    //     message: "Token is missing. Please provide a valid token.",
+    //   });
+    // }
     }
 
-    // Check if the token is missing
-    if (!googleToken && !token) {
-      return res.status(401).json({
-        success: false,
-        message: "Token is missing. Please provide a valid token.",
-      });
-    }
+    
 
     // Verify the token
     try {
