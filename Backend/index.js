@@ -43,7 +43,20 @@ app.use(express.urlencoded({ extended: true }));//Parse URL-encoded payloads
 //       crossOriginEmbedderPolicy: true, // Disable if interfering
 //     })
 //   );//Set secure HTTP headers
-app.use(
+// CORS Configuration
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    if (req.method === 'OPTIONS') {
+      return res.sendStatus(204); // Respond to preflight request
+    }
+    next();
+  });
+  
+  // CORS middleware with specific origins
+  app.use(
     cors({
       origin: function (origin, callback) {
         const allowedOrigins = [
@@ -58,12 +71,11 @@ app.use(
           callback(new Error("Not allowed by CORS"));
         }
       },
-      credentials: true,
-      methods: ["GET", "POST", "PUT", "DELETE"],
-      allowedHeaders: ["Content-Type", "Authorization"],
+      credentials: true, // Allows cookies to be sent with requests
+      methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed HTTP methods
+      allowedHeaders: ["Content-Type", "Authorization"], // Include custom headers
     })
   );
-  
 // Preflight request handling
 app.options('*', cors());
 //7. Rate Limiting
