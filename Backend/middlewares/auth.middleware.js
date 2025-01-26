@@ -17,12 +17,12 @@ export const auth = (req, res, next) => {
       //  console.log('googleMiddlewareToken',googleToken)
 
       // Check if the token is missing
-    // if (!googleToken && !token) {
-    //   return res.status(401).json({
-    //     success: false,
-    //     message: "Token is missing. Please provide a valid token.",
-    //   });
-    // }
+    if (!googleToken && !token) {
+      return res.status(401).json({
+        success: false,
+        message: "Token is missing. Please provide a valid token.",
+      });
+    }
     }
 
     

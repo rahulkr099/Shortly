@@ -5,7 +5,7 @@ import userRoutes from './routes/user.routes.js';
 import helmet from 'helmet'; // For security headers
 import rateLimit from 'express-rate-limit'; // For rate limiting
 import cors from 'cors';
-import {auth} from './middlewares/auth.middleware.js';
+// import {auth} from './middlewares/auth.middleware.js';
 import urlRoutes from './routes/url.routes.js';
 import dotenv from 'dotenv';
 //2. Load environment variables
@@ -58,7 +58,7 @@ const limiter = rateLimit({
 
 //8. Define routes
 app.use("/api/v1",userRoutes);
-app.use("/",auth,urlRoutes);
+app.use("/",urlRoutes);
 
 //9. Health check route
 app.get("/ping", (req, res) => {
