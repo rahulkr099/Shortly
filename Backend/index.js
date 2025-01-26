@@ -55,6 +55,8 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"], // Include custom headers
   })
 );
+// Preflight request handling
+app.options('*', cors());
 //7. Rate Limiting
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, //15 min
