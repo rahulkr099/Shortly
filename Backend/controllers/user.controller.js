@@ -143,7 +143,7 @@ export const login = async (req, res) => {
     };
     //7.Set token as an HTTP-only cookie
     const cookieOptions = {
-      domain:"shortly-frontend.onrender.com",
+      domain:"shortly-f-rahul-kumars-projects-cdeca0dc.vercel.app",
       expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), //3 days
       httpOnly: true,
       sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',

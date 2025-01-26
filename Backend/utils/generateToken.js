@@ -9,7 +9,7 @@ export const generateAccessToken = (payload) => {
     });
 };
 export const generateRefreshToken = (payload) => {
-    return jwt.sign(payload,process.env.REFRESH_TOKEN_SECRET,{
+    return jwt.sign(payload,process.env.REFRESH_TOKEN_SEC,{
         expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
     })
 }
