@@ -1,7 +1,7 @@
 import { apiRequest } from "../api/apiRequest";
 import { URL } from "./constants";
 export async function getAnalytics(nanoId) {
-  const endpoint = `${URL}/analytics/${nanoId}`; // Replace with your actual endpoint
+  const endpoint = `${URL}/url/analytics/${nanoId}`; // Replace with your actual endpoint
   try {
     // console.log("Nano ID passed to getAnalytics:", nanoId);
     const response = await apiRequest(endpoint, "GET");
@@ -14,7 +14,7 @@ export async function getAnalytics(nanoId) {
 }
 
 export async function getUserAnalytics() {
-  const endpoint = `${URL}/user/status`; // Replace with your actual endpoint
+  const endpoint = `${URL}/url/user/status`; // Replace with your actual endpoint
   try {
     const response = await apiRequest(endpoint, "GET");
     // console.log("Analytics of website:", response);

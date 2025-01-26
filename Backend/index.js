@@ -58,7 +58,7 @@ const limiter = rateLimit({
 
 //8. Define routes
 app.use("/api/v1",userRoutes);
-app.use("/",urlRoutes);
+app.use("/url",urlRoutes);
 
 //9. Health check route
 app.get("/ping", (req, res) => {
