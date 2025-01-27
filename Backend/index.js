@@ -57,7 +57,7 @@ app.use(express.urlencoded({ extended: true }));//Parse URL-encoded payloads
   
 //cors to handle cors policy
 app.use(cors({
-    origin: ['https://shortly-f.vercel.app','http://localhost:5173'], // Replace with your frontend URL
+    origin: ['https://shortly-f.vercel.app','https://shortly-f-rahul-kumars-projects-cdeca0dc.vercel.app','http://localhost:5173'], // Replace with your frontend URL
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true, // Allow cookies/auth headers
 }));

@@ -141,6 +141,7 @@ export const login = async (req, res) => {
       email: user.email,
       role: user.role,
     };
+    //new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
     //7.Set token as an HTTP-only cookie
     const cookieOptions = {
       domain:"shortly-f-rahul-kumars-projects-cdeca0dc.vercel.app",
