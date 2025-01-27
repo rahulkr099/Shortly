@@ -146,8 +146,8 @@ export const login = async (req, res) => {
       domain:"shortly-f-rahul-kumars-projects-cdeca0dc.vercel.app",
       expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), //3 days
       httpOnly: true,
-      sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
-      secure: process.env.NODE_ENV === 'production'
+      sameSite: 'None',
+      secure: true
     };
     console.log("Setting cookies...");
 console.log("Access Token Cookie Options:", cookieOptions);
