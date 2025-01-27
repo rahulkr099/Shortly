@@ -144,7 +144,7 @@ export const login = async (req, res) => {
     //new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
     //7.Set token as an HTTP-only cookie
     const cookieOptions = {
-      domain:"shortly-f.vercel.app",
+      // domain:"shortly-f.vercel.app",
       expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), //3 days
       httpOnly: true,
       sameSite: 'None',

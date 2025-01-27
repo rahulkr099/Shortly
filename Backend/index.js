@@ -60,6 +60,7 @@ app.use(cors({
     origin: ['https://shortly-f.vercel.app','https://shortly-f-rahul-kumars-projects-cdeca0dc.vercel.app','http://localhost:5173'], // Replace with your frontend URL
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true, // Allow cookies/auth headers
+    crossDomain:true,
 }));
 
 // // Preflight request handling
