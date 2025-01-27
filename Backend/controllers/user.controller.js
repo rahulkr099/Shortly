@@ -154,11 +154,10 @@ export const login = async (req, res) => {
 console.log("Access Token Cookie Options:", cookieOptions);
 console.log("Refresh Token Cookie Options:", cookieOptions);
     //8.set the cookie and send response
-    return res
-      .cookie("accessToken", accessToken, cookieOptions)
-      .cookie("refreshToken", refreshToken, cookieOptions)
-      .status(200)
-      .json({
+     res.cookie("accessToken", accessToken, cookieOptions);
+      res.cookie("refreshToken", refreshToken, cookieOptions);
+      res.status(200);
+      res.json({
         success: true,
         accessToken,
         refreshToken,
