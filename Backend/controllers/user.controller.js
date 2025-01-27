@@ -148,7 +148,7 @@ export const login = async (req, res) => {
       expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), //3 days
       httpOnly: true,
       sameSite: 'None',
-      // secure: true
+      secure: true
     };
     console.log("Setting cookies...");
 console.log("Access Token Cookie Options:", cookieOptions);
@@ -182,14 +182,14 @@ export const logout = async (req, res) => {
     res.clearCookie("accessToken", {
       path: "/",       // Match the path of the cookie
       httpOnly: true,  // Ensure the cookie can't be accessed via JavaScript
-      // secure: true,    // Ensure it's sent over HTTPS
+      secure: true,    // Ensure it's sent over HTTPS
       sameSite: "None" // Required for cross-origin requests
     });
     
     res.clearCookie("refreshToken", {
       path: "/",       
       httpOnly: true,  
-      // secure: true,    
+      secure: true,    
       sameSite: "None" 
     });
     
@@ -269,7 +269,7 @@ export const refreshAccessToken = async (req, res) => {
       expires: new Date(Date.now() + 24 * 60 * 60 * 1000), //1 days
       httpOnly: true,
       sameSite: 'None',
-      // secure: true
+      secure: true
     };
     return res
       .cookie("accessToken", newAccessToken, cookieOptions)
