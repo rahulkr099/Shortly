@@ -148,7 +148,8 @@ export const login = async (req, res) => {
       expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), //3 days
       httpOnly: true,
       sameSite: 'None',
-      secure: true
+      secure: true,
+      partitioned: true,
     };
     console.log("Setting cookies...");
 console.log("Access Token Cookie Options:", cookieOptions);
@@ -259,6 +260,9 @@ export const refreshAccessToken = async (req, res) => {
     const cookieOptions = {
       expires: new Date(Date.now() + 24 * 60 * 60 * 1000), //1 days
       httpOnly: true,
+      sameSite: 'None',
+      secure: true,
+      partitioned: true,
     };
     return res
       .status(200)
