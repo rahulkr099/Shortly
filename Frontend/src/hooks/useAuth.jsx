@@ -38,7 +38,7 @@ const useAuth = () => {
         setIsAuthenticated(false);
         clearInterval(refreshInterval);
       }
-    }, 40 * 60 * 1000); // Refresh token every 40 minutes
+    }, 3 * 60 * 1000); // Refresh token every 40 minutes
     return () => clearInterval(refreshInterval);
   }, []);
   
