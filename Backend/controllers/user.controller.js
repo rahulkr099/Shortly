@@ -181,10 +181,20 @@ export const logout = async (req, res) => {
 
     // await User.findByIdAndUpdate({email},{refreshToken:null});
     //clear the "token" cookie
-    res.clearCookie("accessToken").clearCookie("refreshToken", {
-      path: "/",
-      httpOnly: true,
+    res.clearCookie("accessToken", {
+      path: "/",       // Match the path of the cookie
+      httpOnly: true,  // Ensure the cookie can't be accessed via JavaScript
+      secure: true,    // Ensure it's sent over HTTPS
+      sameSite: "None" // Required for cross-origin requests
     });
+    
+    res.clearCookie("refreshToken", {
+      path: "/",       
+      httpOnly: true,  
+      secure: true,    
+      sameSite: "None" 
+    });
+    
     //Respond with a success message
     return res.status(200).json({
       success: true,
