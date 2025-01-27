@@ -39,6 +39,7 @@ function Login({ setIsAuthenticated, GoogleAuthWrapper }) {
       });
 
       const result = await response.json();
+      console.log('result in login.jsx',result);
       if (response.ok && result.success) {
         const { accessToken, user } = result;
         handleSuccess(result.message);
