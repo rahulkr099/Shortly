@@ -147,7 +147,7 @@ export const login = async (req, res) => {
       // domain:"shortly-f-rahul-kumars-projects-cdeca0dc.vercel.app",
       expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), //3 days
       httpOnly: true,
-      // sameSite: 'None',
+      sameSite: 'None',
       // secure: true
     };
     console.log("Setting cookies...");
@@ -183,14 +183,14 @@ export const logout = async (req, res) => {
       path: "/",       // Match the path of the cookie
       httpOnly: true,  // Ensure the cookie can't be accessed via JavaScript
       // secure: true,    // Ensure it's sent over HTTPS
-      // sameSite: "None" // Required for cross-origin requests
+      sameSite: "None" // Required for cross-origin requests
     });
     
     res.clearCookie("refreshToken", {
       path: "/",       
       httpOnly: true,  
       // secure: true,    
-      // sameSite: "None" 
+      sameSite: "None" 
     });
     
     //Respond with a success message
@@ -268,7 +268,7 @@ export const refreshAccessToken = async (req, res) => {
     const cookieOptions = {
       expires: new Date(Date.now() + 24 * 60 * 60 * 1000), //1 days
       httpOnly: true,
-      // sameSite: 'None',
+      sameSite: 'None',
       // secure: true
     };
     return res
