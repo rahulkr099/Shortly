@@ -223,7 +223,7 @@ export const refreshAccessToken = async (req, res) => {
   try {
     let decodedToken;
     try {
-    decodedToken = jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET);
+    decodedToken = jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SEC);
     // console.log("Decoded Token:", decodedToken);
     } catch (error) {
       console.error("Token verification failed:", error.message);
