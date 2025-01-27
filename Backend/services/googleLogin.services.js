@@ -67,8 +67,8 @@ export const googleLogin = async (req, res) => {
     const cookieOptions = {
       expires: new Date(Date.now() + 12 * 60 * 60 * 1000), //12 hr
       httpOnly: true,
-      sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
-      secure: process.env.NODE_ENV === 'production'
+      sameSite: 'None',
+      secure: true
     };
     // Step 5: Send the response
     return res
