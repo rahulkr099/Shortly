@@ -25,7 +25,7 @@ import {connect} from './config/database.js'
 connect();
 
 // Set proxy trust (required for secure cookies on Render)
-app.set("trust proxy", true);
+app.set("trust proxy", 1);
 
 //6. Use middleware
 app.use(express.json());//Parse JSON payloads
@@ -83,6 +83,16 @@ app.use("/url",urlRoutes);
 //9. Health check route
 app.get("/ping", (req, res) => {
     return res.send('<h1 style="color:red; font-size:200px;">PONG</h1>'); 
+});
+// Test route for cookies
+app.get('/set-cookie', (req, res) => {
+    res.cookie('testCookie', 'testValue', {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'None',
+        maxAge: 3600000,
+    });
+    res.status(200).send('Cookie set!');
 });
 
 //10. Handle undefined routes
