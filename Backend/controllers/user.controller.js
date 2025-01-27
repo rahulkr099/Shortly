@@ -156,9 +156,9 @@ console.log("Access Token Cookie Options:", cookieOptions);
 console.log("Refresh Token Cookie Options:", cookieOptions);
     //8.set the cookie and send response
     return res
-      .status(200)
       .cookie("accessToken", accessToken, cookieOptions)
       .cookie("refreshToken", refreshToken, cookieOptions)
+      .status(200)
       .json({
         success: true,
         accessToken,
