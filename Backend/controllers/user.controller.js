@@ -211,7 +211,8 @@ export const refreshAccessToken = async (req, res) => {
     req?.cookies?.refreshToken ||
     req?.body?.refreshToken ||
     req?.headers?.["authorization"]?.replace("Bearer ", "");
-
+const regreshToeknfromlocalstorage = req?.body?.refreshTokenFromLocalStorage;
+console.log('refreshTOeknfromLocalstorgae',refreshTokenFromLocalStorage)
     console.log('refreshaccesstoken ka value',incomingRefreshToken);
 
   if (!incomingRefreshToken) {
