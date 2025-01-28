@@ -9,7 +9,9 @@ const useAuth = () => {
   useEffect(() => {
     const checkLoginStatus = async () => {
     const accessToken =  localStorage.getItem('accessToken');
-    if(accessToken){ return 'localstorage has no token'}
+    // console.log('acessToken in useAuth.jsx from localStorage',accessToken)
+    if(!accessToken){ return 'localstorage has no token'}
+
       const response = await fetchWithAuth(`${BASEURL}/auth/status`, {
         method: 'POST',
         credentials: 'include', // To include cookies if needed
