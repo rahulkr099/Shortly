@@ -212,7 +212,7 @@ export const refreshAccessToken = async (req, res) => {
     req?.body?.refreshToken ||
     req?.headers?.["authorization"]?.replace("Bearer ", "");
 const regreshToeknfromlocalstorage = req?.body?.refreshTokenFromLocalStorage;
-console.log('refreshTOeknfromLocalstorgae',refreshTokenFromLocalStorage)
+console.log('refreshTOeknfromLocalstorgae',regreshToeknfromlocalstorage)
     console.log('refreshaccesstoken ka value',incomingRefreshToken);
 
   if (!incomingRefreshToken) {
