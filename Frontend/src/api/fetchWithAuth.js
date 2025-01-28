@@ -30,8 +30,9 @@ const fetchWithAuth = async (url, options = {}, type) => {
         return fetchWithAuth(url, { ...options, _retry: true }, type);
       }else {
         // Refresh token failed, redirect to login
-        alert('Your session has expired. Please log in again.');
-        window.location.href = '/login';
+        // alert('Your session has expired. Please log in again.');
+        // window.location.href = '/login';
+        console.log('Refresh Token is expired')
       }
     }
 
