@@ -2,7 +2,7 @@ import { Navigate, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Home from './pages/Home';
-import RefreshHandler from './hooks/RefreshHandler';
+// import RefreshHandler from './hooks/RefreshHandler';
 import useAuth from './hooks/useAuth'
 import Navbar from './components/Navbar';
 import PropTypes from 'prop-types';
@@ -37,7 +37,7 @@ function App() {
       <Navbar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} isGoogleAuth={isGoogleAuth} setIsGoogleAuth={setIsGoogleAuth}/>
 
       {/* Ensures the authentication state is refreshed on page load */}
-      <RefreshHandler setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} setIsGoogleAuth={setIsGoogleAuth} isGoogleAuth={isGoogleAuth}/>
+      {/* <RefreshHandler setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} setIsGoogleAuth={setIsGoogleAuth} isGoogleAuth={isGoogleAuth}/> */}
       
       <Routes>
         {/* Redirect root path to login */}
