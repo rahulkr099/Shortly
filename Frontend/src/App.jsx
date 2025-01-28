@@ -15,7 +15,9 @@ import useGoogleAuth from './hooks/useGoogleAuth';
 // PrivateRoute Component
  // This combined guard checks both regular authentication and Google authentication
  const PrivateRoute = ({ element, isAuthenticated, isGoogleAuth }) => {
-  return isAuthenticated || isGoogleAuth ? element : <Navigate to="/login" replace={true} />;
+  if (isAuthenticated || isGoogleAuth) return element;
+  return <Navigate to="/login" replace />;
+
 };
 
 function App() {
@@ -41,7 +43,8 @@ function App() {
       
       <Routes>
         {/* Redirect root path to login */}
-        <Route path="/" element={<Navigate to="/home" replace />} />
+        <Route path="/" element={isAuthenticated || isGoogleAuth ? <Navigate to="/home" /> : <Navigate to="/login" />} />
+
 
         {/* Protected route for authenticated users */}
         <Route
