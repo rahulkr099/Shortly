@@ -15,8 +15,8 @@ const refreshToken = async (type) => {
       method: type === "google" ? "GET" : "POST",
       credentials: "include",
       body: type == "google" 
-        ? JSON.stringify({ refreshToken: refreshTokenFromLocalStorage }) // Send the token as a JSON object
-        : undefined,
+        ?undefined : JSON.stringify({ refreshToken: refreshTokenFromLocalStorage }) // Send the token as a JSON object
+        ,
     });
 
     const responseClone = response.clone();
