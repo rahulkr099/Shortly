@@ -9,13 +9,13 @@ const refreshToken = async (type) => {
     const response = await fetch(`${BASEURL}${endpoint}`, {
       method: type === "google" ? "GET" : "POST",
       credentials: "include",
-      body: JSON.stringify({ refreshTokenFromLocalStorage }), // Send the token as a JSON object
+      body: JSON.stringify({ refreshToken:refreshTokenFromLocalStorage }), // Send the token as a JSON object
     });
 
     const responseClone = response.clone();
     const clonedData = await responseClone.json();
-    // console.log(`Response from refreshToken (${type}):`, clonedData);
-    // console.log("refreshToken's message:", clonedData.message);
+    console.log(`Response from refreshToken.js (${type}):`, clonedData);
+    console.log("refreshToken's message:", clonedData.message);
 
     if (!response.ok) {
       console.error("Failed to get Refresh Token:", response);
