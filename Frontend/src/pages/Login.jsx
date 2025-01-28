@@ -41,9 +41,10 @@ function Login({ setIsAuthenticated, GoogleAuthWrapper }) {
       const result = await response.json();
       console.log('result in login.jsx',result);
       if (response.ok && result.success) {
-        const { accessToken, user } = result;
+        const { accessToken,refreshToken, user } = result;
         handleSuccess(result.message);
         localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken",refreshToken);
         dispatch(loginSuccess(user));
         localStorage.setItem("loggedInUser", JSON.stringify(user));
         setIsAuthenticated(true);

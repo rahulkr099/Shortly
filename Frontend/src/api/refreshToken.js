@@ -2,13 +2,14 @@ import { BASEURL } from "../utils/constants";
 
 // refreshToken.js
 const refreshToken = async (type) => {
-  
+  const refreshTokenFromLocalStorage = localStorage.getItem('refreshToken')
   const endpoint = type === "google" ? "/google/auth/refresh" : "/refresh-token";
 
   try {
     const response = await fetch(`${BASEURL}${endpoint}`, {
       method: type === "google" ? "GET" : "POST",
       credentials: "include",
+      body: JSON.stringify({ refreshTokenFromLocalStorage }), // Send the token as a JSON object
     });
 
     const responseClone = response.clone();
@@ -21,12 +22,15 @@ const refreshToken = async (type) => {
       throw new Error("Token Refreshing Failed");
     }
 
-    const tokenKey = type === "google" ? "googleAccessToken" : "accessToken";
-    const token = clonedData[tokenKey];
+    // const tokenKey = type === "google" ? "googleAccessToken" : "accessToken";
+    // const token = clonedData[tokenKey];
+    const {accessToken, refreshToken} = clonedData;
 
-    if (token) {
-      localStorage.setItem(tokenKey, token);
-      return token;
+    if (accessToken && refreshToken) {
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken',refreshToken);
+      console.log('access token is generated using refresh token')
+      return [accessToken,refreshToken];
     } else {
       console.error("No access token in response payload.");
       return null;
