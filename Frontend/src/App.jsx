@@ -43,7 +43,7 @@ function App() {
       
       <Routes>
         {/* Redirect root path to login */}
-        <Route path="/" element={isAuthenticated || isGoogleAuth ? <Navigate to="/home" /> : <Navigate to="/login" />} />
+        <Route path="/" element={ <Navigate to="/home" /> } />
 
 
         {/* Protected route for authenticated users */}
