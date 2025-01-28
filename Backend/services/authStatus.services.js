@@ -30,7 +30,16 @@ export const authStatus = (req, res) => {
 				message:"access token is invalid or expired."
 			});
 		}
-	res.status(200).json({
+    const accessToken = token;
+    const cookieOptions = {
+        expires: new Date(Date.now() + 24 * 60 * 60 * 1000), //1 days
+        httpOnly: true,
+        sameSite: 'None',
+        secure: true
+      };
+	res
+    .cookie('accessToken',accessToken,cookieOptions)
+    .status(200).json({
         success:true,
         message:"User is logged in"
     })	
