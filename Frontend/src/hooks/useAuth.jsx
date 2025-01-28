@@ -8,15 +8,15 @@ const useAuth = () => {
 
   useEffect(() => {
     const checkLoginStatus = async () => {
-      // localStorage.getItem('accessToken');
-    
+    const accessToken =  localStorage.getItem('accessToken');
+    if(accessToken){ return 'localstorage has no token'}
       const response = await fetchWithAuth(`${BASEURL}/auth/status`, {
         method: 'POST',
         credentials: 'include', // To include cookies if needed
         headers: {
           'Content-Type': 'application/json',
         },
-        // body: JSON.stringify({ accessToken }), // Send the token as a JSON object
+        body: JSON.stringify({ accessToken }), // Send the token as a JSON object
       }, "notgoogle");
 
       const data = await response.json(); // Parse response as JSON

@@ -150,9 +150,9 @@ export const login = async (req, res) => {
       sameSite: 'None',
       secure: true
     };
-    console.log("Setting cookies...");
-console.log("Access Token Cookie Options:", cookieOptions);
-console.log("Refresh Token Cookie Options:", cookieOptions);
+    // console.log("Setting cookies...");
+// console.log("Access Token Cookie Options:", cookieOptions);
+// console.log("Refresh Token Cookie Options:", cookieOptions);
     //8.set the cookie and send response
      res.cookie("accessToken", accessToken, cookieOptions);
       res.cookie("refreshToken", refreshToken, cookieOptions);
