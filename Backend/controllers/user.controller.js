@@ -236,7 +236,7 @@ export const refreshAccessToken = async (req, res) => {
     const userById = await User.findById(decodedToken?.id);
     // const userByEmail = await User.findOne({ email: decodedToken?.email });
 
-    console.log("User by ID:", userById);
+    console.log("User by ID from /refreshToken:", userById);
     // console.log("User by Email:", userByEmail);
 
     // const user = userById || userByEmail;

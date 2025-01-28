@@ -3,13 +3,19 @@ import { BASEURL } from "../utils/constants";
 // refreshToken.js
 const refreshToken = async (type) => {
   const refreshTokenFromLocalStorage = localStorage.getItem('refreshToken')
+  if (!refreshTokenFromLocalStorage && type !== "google") {
+    console.error("No refresh token available in localStorage.");
+    return null;
+  }
   const endpoint = type === "google" ? "/google/auth/refresh" : "/refresh-token";
 
   try {
     const response = await fetch(`${BASEURL}${endpoint}`, {
       method: type === "google" ? "GET" : "POST",
       credentials: "include",
-      body: JSON.stringify({ refreshToken:refreshTokenFromLocalStorage }), // Send the token as a JSON object
+      body: type !== "google" 
+        ? JSON.stringify({ refreshToken: refreshTokenFromLocalStorage }) // Send the token as a JSON object
+        : undefined,
     });
 
     const responseClone = response.clone();
