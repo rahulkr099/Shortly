@@ -1,44 +1,40 @@
-import { useEffect} from "react";
+import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 
-function RefreshHandler({ setIsAuthenticated, isAuthenticated , isGoogleAuth, setIsGoogleAuth }) {
+function RefreshHandler({ setIsAuthenticated, isAuthenticated, isGoogleAuth, setIsGoogleAuth }) {
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if a token exists in localStorage
-    // const token = localStorage.getItem("token");
-    if (isAuthenticated) {
-      setIsAuthenticated(true);
-      // console.log('authenticate', isAuthenticated)
-      // Redirect to home if accessing public routes
-      const publicRoutes = ["/", "/login", "/signup"];
-      if (publicRoutes.includes(location.pathname)) {
-        navigate("/home", { replace: false });
-      }
-    } else if (isGoogleAuth) {
-      setIsGoogleAuth(true);
-      // console.log('authenticate', isGoogleAuth)
+    console.log('RefreshHandler triggered');
+    console.log('Auth State:', { isAuthenticated, isGoogleAuth });
 
-      // Redirect to home if accessing public routes
-      const publicRoutes = ["/", "/login", "/signup"];
-      if (publicRoutes.includes(location.pathname)) {
+    const publicRoutes = ["/", "/login", "/signup"];
+    const isOnPublicRoute = publicRoutes.includes(location.pathname);
+
+    if (isAuthenticated || isGoogleAuth) {
+      // Redirect to home if user is authenticated and on a public route
+      if (isOnPublicRoute) {
         navigate("/home", { replace: true });
       }
     } else {
-      setIsGoogleAuth(false)
+      // Redirect to login if unauthenticated and trying to access restricted routes
+      if (!isOnPublicRoute) {
+        navigate("/login", { replace: true });
+      }
     }
-  }, [location.pathname, setIsAuthenticated, navigate, isAuthenticated , isGoogleAuth,setIsGoogleAuth]);
+  }, [isAuthenticated, isGoogleAuth, location.pathname, navigate]);
 
-  // No UI rendering for this component
-  return null;
+  return null; // No UI rendering for this component
 }
+
 // Define prop types for RefreshHandler
 RefreshHandler.propTypes = {
   setIsAuthenticated: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
-  isGoogleAuth:PropTypes.bool.isRequired,
+  isGoogleAuth: PropTypes.bool.isRequired,
   setIsGoogleAuth: PropTypes.func.isRequired
 };
+
 export default RefreshHandler;
