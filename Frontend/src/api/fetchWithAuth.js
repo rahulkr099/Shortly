@@ -5,7 +5,7 @@ const fetchWithAuth = async (url, options = {}, type) => {
   // const refreshTokenFn = type === "google" ? require("./refreshGoogleToken") : require("./refreshToken");
 
   const token = localStorage.getItem(tokenKey);
-  // console.log(`${type} token in localStorage:`, token);
+  console.log(`${type} token in localStorage:`, token);
 
   const headers = {
     'Content-Type': 'application/json',
