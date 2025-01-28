@@ -14,6 +14,9 @@ const refreshToken = async (type) => {
     const response = await fetch(`${BASEURL}${endpoint}`, {
       method: type === "google" ? "GET" : "POST",
       credentials: "include",
+      headers: {
+        "Content-Type": "application/json", // Specify JSON format
+      },
       body: JSON.stringify({ refreshToken: refreshTokenFromLocalStorage }) // Send the token as a JSON object
     });
 
