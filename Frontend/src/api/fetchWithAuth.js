@@ -32,7 +32,7 @@ const headers = {
 
       const newToken = await refreshToken(type);
       if (newToken) {
-        console.log("Token refreshed successfully. Retrying original request...");
+        console.log(`Token refreshed successfully. Retrying original request of ${type}`);
         return fetchWithAuth(url, { ...options, _retry: true }, type);
       }else {
         // Refresh token failed, redirect to login

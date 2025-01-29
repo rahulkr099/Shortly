@@ -7,6 +7,8 @@ export const checkGoogleAccessToken = async (req, res) => {
     const accessToken =
       req?.cookies?.googleAccessToken || req?.body?.googleAccessToken;
     console.log("accessToken in googleAuthServices.js", accessToken);
+    console.log('googleAccessToken in cookies',req?.cookies?.googleAccessToken);
+    console.log('googleAccessToken in body',req?.body?.googleAccessToken);
     
     const googleMiddlewareToken = req?.cookies?.googleMiddlewareToken || req?.body?.googleMiddlewareToken;
     console.log("googleMiddlewareToken in googleAuthServices.js", googleMiddlewareToken);
