@@ -45,7 +45,6 @@ export const auth = (req, res, next) => {
         message: "Token is invalid.",
       });
     }
-
     next();
   } catch (err) {
     console.error("Error in authentication middleware:", err);

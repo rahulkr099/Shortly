@@ -43,18 +43,7 @@ app.use(express.urlencoded({ extended: true }));//Parse URL-encoded payloads
 //       crossOriginEmbedderPolicy: true, // Disable if interfering
 //     })
 //   );//Set secure HTTP headers
-// // CORS Configuration
-// app.use((req, res, next) => {
-//     res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
-//     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-//     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-//     res.header('Access-Control-Allow-Credentials', 'true');
-//     if (req.method === 'OPTIONS') {
-//       return res.sendStatus(204); // Respond to preflight request
-//     }
-//     next();
-//   });
-  
+
 //cors to handle cors policy
 app.use(cors({
     origin: ['https://shortly-f.vercel.app/','https://shortly-f.vercel.app','https://shortly-f.vercel.app/login','https://shortly-f.vercel.app/home','https://shortly-f-rahul-kumars-projects-cdeca0dc.vercel.app/','http://localhost:5173'], // Replace with your frontend URL
@@ -75,7 +64,7 @@ const limiter = rateLimit({
         message:"Too many requests, please try again later.",
     }
 });
-// app.use(limiter);
+app.use(limiter);
 
 //8. Define routes
 app.use("/api/v1",userRoutes);
