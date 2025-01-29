@@ -1,17 +1,23 @@
 // fetchWithAuth.js
 import refreshToken from "./refreshToken";
 const fetchWithAuth = async (url, options = {}, type) => {
-  const tokenKey = type === "google" ? "googleAccessToken" : "accessToken";
-  // const refreshTokenFn = type === "google" ? require("./refreshGoogleToken") : require("./refreshToken");
+  const tokenKeys = type === "google" 
+  ? ["googleAccessToken", "googleMiddlewareToken"] 
+  : ["accessToken"];
 
-  const token = localStorage.getItem(tokenKey);
-  console.log(`${type} token in localStorage:`, token);
+const tokens = tokenKeys.map(key => localStorage.getItem(key)).filter(Boolean);
 
-  const headers = {
-    'Content-Type': 'application/json',
-    ...(token && { Authorization: `Bearer ${token}` }),
-    ...options.headers,
-  };
+console.log(`${type} tokens in localStorage:`, tokens);
+
+// Construct Authorization header
+const authHeader = tokens.length ? { Authorization: `Bearer ${tokens.join(" ")}` } : {};
+
+const headers = {
+  'Content-Type': 'application/json',
+  ...authHeader,
+  ...options.headers,
+};
+
 
   try {
     const response = await fetch(url, { ...options, headers, credentials: "include" });

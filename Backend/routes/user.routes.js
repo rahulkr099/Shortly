@@ -39,7 +39,7 @@ router.post("/reset-password-token", resetPasswordToken)
 router.post("/reset-password", resetPassword)
 router.post("/refresh-token",refreshAccessToken)
 router.get('/google/auth',googleLogin);
-router.get('/google/auth/status',checkGoogleAccessToken);
+router.post('/google/auth/status',checkGoogleAccessToken);
 router.get('/google/auth/refresh',authenticateGoogleRequest);
 router.post('/google/auth/revoke',revokeGoogleToken);
 

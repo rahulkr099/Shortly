@@ -52,9 +52,9 @@ export const googleLogin = async (req, res) => {
       });
     }
     const googleAccessToken = googleRes.tokens.access_token;
-    // console.log("googleAccessToken", googleAccessToken);
+    console.log("googleAccessToken", googleAccessToken);
     const googleRefreshToken = googleRes.tokens.refresh_token;
-    // console.log('googleRefreshToken',googleRefreshToken);
+    console.log('googleRefreshToken',googleRefreshToken);
     const id_token = googleRes.tokens.id_token;
 
     const googleMiddlewareToken = generateGoogleMiddlewareToken({
@@ -80,7 +80,9 @@ export const googleLogin = async (req, res) => {
       .json({
         success: true,
         message: "Authentication successful",
-        // token,
+        googleRefreshToken,
+        googleAccessToken,
+        googleMiddlewareToken,
         user,
       });
   } catch (err) {

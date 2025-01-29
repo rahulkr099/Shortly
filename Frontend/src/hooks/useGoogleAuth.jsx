@@ -3,16 +3,24 @@ import fetchWithAuth from '../api/fetchWithAuth'
 import {BASEURL} from '../utils/constants'
 
 const useGoogleAuth = () => {
-  const [isGoogleAuth, setIsGoogleAuth] = useState(false)
+  const [isGoogleAuth, setIsGoogleAuth] = useState(false);
+
 
   useEffect(() => {
     const checkGoogleAuth = async () => {
+
+      const googleAccessToken = localStorage.getItem('googleAccessToken');
+      const googleMiddlewareToken = localStorage.getItem('googleMiddlewareToken');    
+
+      if(!googleAccessToken && !googleMiddlewareToken) 
+        { return 'googleAccessToken and googleMiddlewareToken is missing'}
       const googleRes = await fetchWithAuth(`${BASEURL}/google/auth/status`, {
-        method: 'GET',
+        method: 'POST',
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({ googleAccessToken, googleMiddlewareToken }),
       }, "google")
 
       const googleData = await googleRes.json();

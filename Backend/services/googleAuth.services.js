@@ -6,12 +6,21 @@ export const checkGoogleAccessToken = async (req, res) => {
   try {
     const accessToken =
       req?.cookies?.googleAccessToken || req?.body?.googleAccessToken;
-    // console.log("accessToken in checkGoogleAccessToken", accessToken);
+    console.log("accessToken in googleAuthServices.js", accessToken);
+    
+    const googleMiddlewareToken = req?.cookies?.googleMiddlewareToken || req?.body?.googleMiddlewareToken;
+    console.log("googleMiddlewareToken in googleAuthServices.js", googleMiddlewareToken);
     if (!accessToken) {
       return res.status(401).json({
         success: false,
         message: "Access Token is missing or expired",
       });
+    }
+    if(!googleMiddlewareToken){
+      return res.status(401).json({
+        success:false,
+        message:"Google Middleware Token is missing or expired"
+      })
     }
     // await authenticateGoogleRequest(User);
     //check user is registered or not
@@ -43,8 +52,16 @@ export const checkGoogleAccessToken = async (req, res) => {
         message: "Google accessToken is expired",
       });
     }
-
-    res.status(200).json({
+    const cookieOptions = {
+      expires: new Date(Date.now() + 24 * 60 * 60 * 1000), //1 days
+      httpOnly: true,
+      sameSite: 'None',
+      secure: true
+    };
+    res
+    .cookie('googleAccessToken',accessToken,cookieOptions)
+    .cookie('googleMiddlewareToken',googleMiddlewareToken,cookieOptions)
+    .status(200).json({
       success: true,
       userData,
       message: "Google accessToken is currently active",
@@ -60,7 +77,7 @@ export const checkGoogleAccessToken = async (req, res) => {
 
 export const authenticateGoogleRequest = async (req, res) => {
   try {
-    console.log("Trying to authenticate access token.");
+    console.log("Trying to authenticate google access token via refresh token.");
 
     // Retrieve refresh token from cookies or body
     const incomingRefreshToken =

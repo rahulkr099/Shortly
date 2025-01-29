@@ -2,22 +2,29 @@ import { BASEURL } from "../utils/constants";
 
 // refreshToken.js
 const refreshToken = async (type) => {
-  const refreshTokenFromLocalStorage = localStorage.getItem('refreshToken')
-  console.log('refreshTokenfromlocalstorgae',refreshTokenFromLocalStorage)
-  if (!refreshTokenFromLocalStorage && type !== "google") {
+  const refreshTokenFromLocalStorage =
+    type === "google"
+      ? localStorage.getItem("googleRefreshToken")
+      : localStorage.getItem("refreshToken");
+  console.log("refreshTokenfromlocalstorgae", refreshTokenFromLocalStorage);
+  if (!refreshTokenFromLocalStorage) {
     console.error("No refresh token available in localStorage.");
     return null;
   }
-  const endpoint = type === "google" ? "/google/auth/refresh" : "/refresh-token";
+  const endpoint =
+    type === "google" ? "/google/auth/refresh" : "/refresh-token";
 
   try {
     const response = await fetch(`${BASEURL}${endpoint}`, {
-      method: type === "google" ? "GET" : "POST",
+      method: "POST",
       credentials: "include",
       headers: {
         "Content-Type": "application/json", // Specify JSON format
       },
-      body: type === "google" ? undefined : JSON.stringify({ refreshToken: refreshTokenFromLocalStorage }) // Send the token as a JSON object
+      body:
+        type === "google"
+          ? JSON.stringify({ googleRefreshToken: refreshTokenFromLocalStorage })
+          : JSON.stringify({ refreshToken: refreshTokenFromLocalStorage }), // Send the token as a JSON object
     });
 
     const responseClone = response.clone();
@@ -32,16 +39,30 @@ const refreshToken = async (type) => {
 
     // const tokenKey = type === "google" ? "googleAccessToken" : "accessToken";
     // const token = clonedData[tokenKey];
-    const {accessToken, refreshToken} = clonedData;
 
-    if (accessToken && refreshToken) {
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken',refreshToken);
-      console.log('access token is generated using refresh token')
-      return [accessToken,refreshToken];
+    if (type === "google") {
+      const { googleAccessToken, googleRefreshToken } = clonedData;
+
+      if (googleAccessToken && googleRefreshToken) {
+        localStorage.setItem("googleAccessToken", googleAccessToken);
+        localStorage.setItem("googleRefreshToken", googleRefreshToken);
+        console.log(
+          "google access token is generated using google refresh token"
+        );
+        return [googleAccessToken, googleRefreshToken];
+      }
     } else {
-      console.error("No access token in response payload.");
-      return null;
+      const { accessToken, refreshToken } = clonedData;
+
+      if (accessToken && refreshToken) {
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+        console.log("access token is generated using refresh token");
+        return [accessToken, refreshToken];
+      } else {
+        console.error("No access token in response payload.");
+        return null;
+      }
     }
   } catch (error) {
     console.error(`Error during refreshing token (${type}):`, error);
