@@ -32,7 +32,7 @@ app.set("trust proxy", 1);
 app.use(express.json()); //Parse JSON payloads
 app.use(cookieParser()); //Parse cookies
 app.use(express.urlencoded({ extended: true })); //Parse URL-encoded payloads
-// ✅ CORS Configuration (Matches frontend URLs)
+// CORS Configuration (Matches frontend URLs)
 app.use(
   cors({
     origin: [
@@ -45,7 +45,7 @@ app.use(
   })
 );
 
-// ✅ Helmet Configuration (Security Headers)
+// Helmet Configuration (Security Headers)
 app.use(
   helmet({
     contentSecurityPolicy: {
@@ -89,16 +89,6 @@ app.use("/url", urlRoutes);
 //9. Health check route
 app.get("/ping", (req, res) => {
   return res.send('<h1 style="color:red; font-size:200px;">PONG</h1>');
-});
-// Test route for cookies
-app.get("/set-cookie", (req, res) => {
-  res.cookie("testCookie", "testValue", {
-    httpOnly: true,
-    secure: true,
-    sameSite: "None",
-    maxAge: 3600000,
-  });
-  res.status(200).send("Cookie set!");
 });
 
 //10. Handle undefined routes
