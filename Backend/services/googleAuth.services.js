@@ -107,6 +107,7 @@ export const authenticateGoogleRequest = async (req, res) => {
       .json({
         success: true,
         googleAccessToken: newTokens.access_token,
+        googleRefreshToken: newTokens.refresh_token,
         expiresIn: newTokens.expiry_date,
       });
   } catch (error) {
