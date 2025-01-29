@@ -14,6 +14,7 @@ const useGoogleAuth = () => {
 
       if(!googleAccessToken && !googleMiddlewareToken) 
         { return 'googleAccessToken and googleMiddlewareToken is missing'}
+      
       const googleRes = await fetchWithAuth(`${BASEURL}/google/auth/status`, "google")
 
       const googleData = await googleRes.json();

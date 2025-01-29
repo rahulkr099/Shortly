@@ -1,6 +1,4 @@
-
 import QRCode from 'qrcode';
-
 export const qrcode = async (req, res) => {
     const { url } = req.body;
     console.log('url in qrcode.js',url);

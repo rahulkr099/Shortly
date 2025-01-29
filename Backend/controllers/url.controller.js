@@ -4,19 +4,6 @@ import { nanoid } from "nanoid";
 import dotenv from 'dotenv'
 dotenv.config();
 
-// async function createUrl(userId, redirectURL, customUrl = null) {
-//   try {
-//     const shortUrl = await URL.createShortUrl({
-//       userId,
-//       redirectURL,
-//       customUrl,
-//     });
-//     console.log("Short URL created:", shortUrl);
-//   } catch (error) {
-//     console.error("Error creating short URL:", error.message);
-//   }
-// }
-
 export async function handleUserAnalytics(req, res) {
   try {
     const userId = req.user.id;
@@ -36,24 +23,11 @@ export async function handleUserAnalytics(req, res) {
   }
 }
 
-
 export async function handleShortenURL(req, res) {
   try {
     const { url, customNanoId } = req.body; // Extract original URL and optional custom ID
     const userId = req.user.id; // Get the authenticated user's ID
-
-    // let userObjectId;
-    // if (mongoose.Types.ObjectId.isValid(userId)) {
-    //   userObjectId = new mongoose.Types.ObjectId(userId);
-    // } else {
-    //   // If userId is not a valid ObjectId, handle it appropriately
-    //   return res.status(400).json({
-    //     success: false,
-    //     message: "Invalid userId format. Please provide a valid ObjectId.",
-    //   });
-    // }
-
-    // console.log('customNanoid',customNanoId);
+;
     // Validate the URL
     if (!url) {
       return res.status(400).json({ error: "URL is required" });

@@ -2,7 +2,6 @@
 import jwt from "jsonwebtoken";
 import dotenv from 'dotenv'
 dotenv.config();
-
 export const auth = (req, res, next) => {
   try {
     let googleToken;
@@ -11,10 +10,10 @@ export const auth = (req, res, next) => {
       req?.cookies?.accessToken ||
       req?.body?.accessToken ||
       req?.headers?.["authorization"]?.replace("Bearer ", "");
-      console.log('tokein in authMidleware.js',token)
+      console.log('token in authMiddleware.js',token)
     if(!token){
        googleToken = req?.body?.googleMiddlewareToken || req?.cookies?.googleMiddlewareToken;
-      //  console.log('googleMiddlewareToken',googleToken)
+       console.log('googleMiddlewareToken in authMiddleware.js',googleToken)
 
       // Check if the token is missing
     if (!googleToken && !token) {
@@ -24,9 +23,6 @@ export const auth = (req, res, next) => {
       });
     }
     }
-
-    
-
     // Verify the token
     try {
       let decode;
@@ -41,7 +37,8 @@ export const auth = (req, res, next) => {
           .status(401)
           .json({ success: false, message: "Invalid or Expired Token" });
       }
-      req.user = decode;
+      req.user = decode;//user data is inserted in req so that we can check authenticated user is using our services
+      //eg. while shortening our url we can check who is requesting for shortening service 
     } catch (error) {
       return res.status(401).json({
         success: false,

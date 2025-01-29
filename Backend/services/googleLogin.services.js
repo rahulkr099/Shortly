@@ -13,7 +13,6 @@ export const googleLogin = async (req, res) => {
       message: "Authorization code is missing",
     });
   }
-
   try {
     // Step 1: Exchange authorization code for access tokens
     const googleRes = await oauth2Client.getToken(code);
@@ -55,8 +54,9 @@ export const googleLogin = async (req, res) => {
     console.log("googleAccessToken", googleAccessToken);
     const googleRefreshToken = googleRes.tokens.refresh_token;
     console.log('googleRefreshToken',googleRefreshToken);
-    const id_token = googleRes.tokens.id_token;
-
+    // const id_token = googleRes.tokens.id_token;
+//googleMiddlewareToken is used to store google authenticated user details. So that we can 
+//verify authenticated user is accessing the services.
     const googleMiddlewareToken = generateGoogleMiddlewareToken({
           firstName:user.firstName,
           lastName:user.lastName,
@@ -67,8 +67,8 @@ export const googleLogin = async (req, res) => {
     const cookieOptions = {
       expires: new Date(Date.now() + 12 * 60 * 60 * 1000), //12 hr
       httpOnly: true,
-      sameSite: 'None',
-      secure: true
+      sameSite: process.env.NODE_ENV === 'production'?'None':'strict',
+      secure: process.env.NODE_ENV === 'production'? true : false,
     };
     // Step 5: Send the response
     return res
@@ -76,7 +76,6 @@ export const googleLogin = async (req, res) => {
       .cookie("googleAccessToken", googleAccessToken, cookieOptions)
       .cookie("googleRefreshToken",googleRefreshToken,cookieOptions)
       .cookie("googleMiddlewareToken",googleMiddlewareToken,cookieOptions)
-      // .cookie("id_token",id_token,cookieOptions) //used for google auth middleware
       .json({
         success: true,
         message: "Authentication successful",

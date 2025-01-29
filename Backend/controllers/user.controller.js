@@ -1,7 +1,10 @@
 import bcrypt from "bcrypt";
 import User from "../models/user.model.js";
-import { generateAccessToken, generateRefreshToken } from "../utils/generateToken.js";
-import dotenv from 'dotenv'
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from "../utils/generateToken.js";
+import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 dotenv.config();
 //sign up route handler
@@ -147,23 +150,23 @@ export const login = async (req, res) => {
       // domain:"shortly-f.vercel.app",
       expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), //3 days
       httpOnly: true,
-      sameSite: 'None',
-      secure: true
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "strict",
+      secure: process.env.NODE_ENV === "production" ? true : false,
     };
     // console.log("Setting cookies...");
-// console.log("Access Token Cookie Options:", cookieOptions);
-// console.log("Refresh Token Cookie Options:", cookieOptions);
+    // console.log("Access Token Cookie Options:", cookieOptions);
+    // console.log("Refresh Token Cookie Options:", cookieOptions);
     //8.set the cookie and send response
-     res.cookie("accessToken", accessToken, cookieOptions);
-      res.cookie("refreshToken", refreshToken, cookieOptions);
-      res.status(200);
-      res.json({
-        success: true,
-        accessToken,
-        refreshToken,
-        user: sanitizedUser,
-        message: "User logged in successfully",
-      });
+    res.cookie("accessToken", accessToken, cookieOptions);
+    res.cookie("refreshToken", refreshToken, cookieOptions);
+    res.status(200);
+    res.json({
+      success: true,
+      accessToken,
+      refreshToken,
+      user: sanitizedUser,
+      message: "User logged in successfully",
+    });
   } catch (err) {
     console.error(`Error during login process: ${err.message}`);
     return res.status(500).json({
@@ -180,19 +183,19 @@ export const logout = async (req, res) => {
     // await User.findByIdAndUpdate({email},{refreshToken:null});
     //clear the "token" cookie
     res.clearCookie("accessToken", {
-      path: "/",       // Match the path of the cookie
-      httpOnly: true,  // Ensure the cookie can't be accessed via JavaScript
-      secure: true,    // Ensure it's sent over HTTPS
-      sameSite: "None" // Required for cross-origin requests
+      path: "/", // Match the path of the cookie
+      httpOnly: true, // Ensure the cookie can't be accessed via JavaScript
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "strict",
+      secure: process.env.NODE_ENV === "production" ? true : false,
     });
-    
+
     res.clearCookie("refreshToken", {
-      path: "/",       
-      httpOnly: true,  
-      secure: true,    
-      sameSite: "None" 
+      path: "/",
+      httpOnly: true,
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "strict",
+      secure: process.env.NODE_ENV === "production" ? true : false,
     });
-    
+
     //Respond with a success message
     return res.status(200).json({
       success: true,
@@ -211,9 +214,9 @@ export const refreshAccessToken = async (req, res) => {
     req?.cookies?.refreshToken ||
     req?.body?.refreshToken ||
     req?.headers?.["authorization"]?.replace("Bearer ", "");
-const regreshToeknfromlocalstorage = req?.body?.refreshTokenFromLocalStorage;
-console.log('refreshTOeknfromLocalstorgae',regreshToeknfromlocalstorage)
-    console.log('refreshaccesstoken ka value',incomingRefreshToken);
+  const regreshToeknfromlocalstorage = req?.body?.refreshTokenFromLocalStorage;
+  console.log("refreshTOeknfromLocalstorgae", regreshToeknfromlocalstorage);
+  console.log("refreshaccesstoken ka value", incomingRefreshToken);
 
   if (!incomingRefreshToken) {
     return res.status(401).json({
@@ -224,14 +227,17 @@ console.log('refreshTOeknfromLocalstorgae',regreshToeknfromlocalstorage)
   try {
     let decodedToken;
     try {
-    decodedToken = jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SEC);
-    // console.log("Decoded Token:", decodedToken);
+      decodedToken = jwt.verify(
+        incomingRefreshToken,
+        process.env.REFRESH_TOKEN_SEC
+      );
+      // console.log("Decoded Token:", decodedToken);
     } catch (error) {
       console.error("Token verification failed:", error.message);
       return res.status(401).json({
-        success:false,
-        message: "Refresh token is expired or invalid"
-      })
+        success: false,
+        message: "Refresh token is expired or invalid",
+      });
     }
 
     const userById = await User.findById(decodedToken?.id);
@@ -256,7 +262,6 @@ console.log('refreshTOeknfromLocalstorgae',regreshToeknfromlocalstorage)
         message: "Invalid or expired refresh token.",
       });
     }
-
     const newAccessToken = generateAccessToken({
       email: user.email,
       id: user._id,
@@ -269,10 +274,10 @@ console.log('refreshTOeknfromLocalstorgae',regreshToeknfromlocalstorage)
     await User.findByIdAndUpdate(user._id, { refreshToken: newRefreshToken });
 
     const cookieOptions = {
-      expires: new Date(Date.now() + 24 * 60 * 60 * 1000), //1 days
+      expires: new Date(Date.now() + 12 * 60 * 60 * 1000), //12 hr
       httpOnly: true,
-      sameSite: 'None',
-      secure: true
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "strict",
+      secure: process.env.NODE_ENV === "production" ? true : false,
     };
     return res
       .cookie("accessToken", newAccessToken, cookieOptions)

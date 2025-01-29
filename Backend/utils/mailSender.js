@@ -13,8 +13,6 @@ export const mailSender = async (email, title, body, text) => {
                     pass: process.env.MAIL_PASS, //your email password
                 }
             })
-
-
             let info = await transporter.sendMail({
                 from: process.env.MAIL_USER,
                 to:`${email}`,
