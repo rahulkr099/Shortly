@@ -1,72 +1,48 @@
 import { BASEURL } from "../utils/constants";
 
-// refreshToken.js
 const refreshToken = async (type) => {
-  const refreshTokenFromLocalStorage =
-    type === "google"
-      ? localStorage.getItem("googleRefreshToken")
-      : localStorage.getItem("refreshToken");
-  console.log("refreshTokenfromlocalstorgae", refreshTokenFromLocalStorage);
-  if (!refreshTokenFromLocalStorage) {
-    console.error("No refresh token available in localStorage.");
+  const tokenKeys = type === "google"
+    ? { refresh: "googleRefreshToken", access: "googleAccessToken", endpoint: "/google/auth/refresh" }
+    : { refresh: "refreshToken", access: "accessToken", endpoint: "/refresh-token" };
+
+  const refreshTokenFromStorage = localStorage.getItem(tokenKeys.refresh);
+
+  if (!refreshTokenFromStorage) {
+    console.error(`[refreshToken] No ${tokenKeys.refresh} found in localStorage.`);
     return null;
   }
-  const endpoint =
-    type === "google" ? "/google/auth/refresh" : "/refresh-token";
 
   try {
-    const response = await fetch(`${BASEURL}${endpoint}`, {
+    const response = await fetch(`${BASEURL}${tokenKeys.endpoint}`, {
       method: "POST",
       credentials: "include",
-      headers: {
-        "Content-Type": "application/json", // Specify JSON format
-      },
-      body:
-        type === "google"
-          ? JSON.stringify({ googleRefreshToken: refreshTokenFromLocalStorage })
-          : JSON.stringify({ refreshToken: refreshTokenFromLocalStorage }), // Send the token as a JSON object
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ [tokenKeys.refresh]: refreshTokenFromStorage }),
     });
 
-    const responseClone = response.clone();
-    const clonedData = await responseClone.json();
-    console.log(`Response from refreshToken.js (${type}):`, clonedData);
-    console.log("refreshToken's message:", clonedData.message);
+    const responseData = await response.json();
+    console.log(`[refreshToken] Response (${type}):`, responseData);
 
     if (!response.ok) {
-      console.error("Failed to get Refresh Token:", response);
-      throw new Error("Token Refreshing Failed");
+      console.error(`[refreshToken] Failed to refresh token: ${response.status} - ${responseData.message}`);
+      throw new Error("Token refresh failed");
     }
 
-    // const tokenKey = type === "google" ? "googleAccessToken" : "accessToken";
-    // const token = clonedData[tokenKey];
+    const { [tokenKeys.access]: newAccessToken, [tokenKeys.refresh]: newRefreshToken } = responseData;
 
-    if (type === "google") {
-      const { googleAccessToken, googleRefreshToken } = clonedData;
-
-      if (googleAccessToken && googleRefreshToken) {
-        localStorage.setItem("googleAccessToken", googleAccessToken);
-        localStorage.setItem("googleRefreshToken", googleRefreshToken);
-        console.log(
-          "google access token is generated using google refresh token"
-        );
-        return [googleAccessToken, googleRefreshToken];
-      }
+    if (newAccessToken && newRefreshToken) {
+      localStorage.setItem(tokenKeys.access, newAccessToken);
+      localStorage.setItem(tokenKeys.refresh, newRefreshToken);
+      console.log(`[refreshToken] Successfully refreshed tokens for ${type}.`);
+      return [newAccessToken, newRefreshToken];
     } else {
-      const { accessToken, refreshToken } = clonedData;
-
-      if (accessToken && refreshToken) {
-        localStorage.setItem("accessToken", accessToken);
-        localStorage.setItem("refreshToken", refreshToken);
-        console.log("access token is generated using refresh token");
-        return [accessToken, refreshToken];
-      } else {
-        console.error("No access token in response payload.");
-        return null;
-      }
+      console.error("[refreshToken] Response missing required tokens.");
+      return null;
     }
   } catch (error) {
-    console.error(`Error during refreshing token (${type}):`, error);
-    return null; // Return null if refresh fails
+    console.error(`[refreshToken] Error during token refresh (${type}):`, error);
+    return null;
   }
 };
+
 export default refreshToken;

@@ -1,26 +1,44 @@
-// fetchWithAuth.js
 import refreshToken from "./refreshToken";
-const fetchWithAuth = async (url, options = {}, type) => {
-  const tokenKeys = type === "google" 
-  ? ["googleAccessToken", "googleMiddlewareToken"] 
-  : ["accessToken"];
 
-const tokens = tokenKeys.map(key => localStorage.getItem(key)).filter(Boolean);
+const fetchWithAuth = async (url, type = "notgoogle", options = {}) => {
+  let tokenPayload = {};
+  
+  if (type === "google") {
+    const googleAccessToken = localStorage.getItem("googleAccessToken");
+    const googleMiddlewareToken = localStorage.getItem("googleMiddlewareToken");
 
-console.log(`${type} tokens in localStorage:`, tokens);
+    if (!googleAccessToken || !googleMiddlewareToken) {
+      console.error("Missing Google authentication tokens");
+      return Promise.reject("Google authentication tokens missing");
+    }
 
-// Construct Authorization header
-const authHeader = tokens.length ? { Authorization: `Bearer ${tokens.join(" ")}` } : {};
+    tokenPayload = { googleAccessToken, googleMiddlewareToken };
+  } else {
+    const accessToken = localStorage.getItem("accessToken");
 
-const headers = {
-  'Content-Type': 'application/json',
-  ...authHeader,
-  ...options.headers,
-};
+    if (!accessToken) {
+      console.error("Missing access token");
+      return Promise.reject("Access token missing");
+    }
 
+    tokenPayload = { accessToken };
+  }
+
+  const headers = {
+    "Content-Type": "application/json",
+    ...(options.headers || {}),  // Merge with any additional headers
+  };
+
+  const fetchOptions = {
+    method: "POST",  // Default to POST if not specified
+    credentials: "include",
+    headers,
+    body: JSON.stringify(tokenPayload),
+    ...options,  // Merge other provided options
+  };
 
   try {
-    const response = await fetch(url, { ...options, headers, credentials: "include" });
+    const response = await fetch(url, fetchOptions);
 
     const responseClone = response.clone();
     const clonedData = await responseClone.json();
@@ -28,24 +46,23 @@ const headers = {
     console.log("message:", clonedData.message);
 
     if (response.status === 401 && !options._retry) {
-      console.log("Access token expired. Attempting to refresh token... in fetchWithAuth.js");
+      console.log("Access token expired. Attempting to refresh token...");
 
       const newToken = await refreshToken(type);
       if (newToken) {
-        console.log(`Token refreshed successfully. Retrying original request of ${type}`);
-        return fetchWithAuth(url, { ...options, _retry: true }, type);
-      }else {
-        // Refresh token failed, redirect to login
-        // alert('Your session has expired. Please log in again.');
-        // window.location.href = '/login';
-        console.log('Refresh Token is expired')
+        console.log(`Token refreshed successfully. Retrying original request for ${type}`);
+        return fetchWithAuth(url, type, { ...options, _retry: true });
+      } else {
+        console.log("Refresh Token expired. User needs to re-authenticate.");
+        return Promise.reject("Session expired, please log in again.");
       }
     }
 
     return response;
   } catch (error) {
     console.error("Request failed:", error);
-    throw error;
+    return Promise.reject(error);
   }
 };
+
 export default fetchWithAuth;

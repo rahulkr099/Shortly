@@ -12,14 +12,7 @@ const useAuth = () => {
     // console.log('acessToken in useAuth.jsx from localStorage',accessToken)
     if(!accessToken){ return 'localstorage has no token'}
 
-      const response = await fetchWithAuth(`${BASEURL}/auth/status`, {
-        method: 'POST',
-        credentials: 'include', // To include cookies if needed
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ accessToken }), // Send the token as a JSON object
-      }, "notgoogle");
+      const response = await fetchWithAuth(`${BASEURL}/auth/status`, "notgoogle");
 
       const data = await response.json(); // Parse response as JSON
       console.log('Response from useAuth.jsx:', data);
