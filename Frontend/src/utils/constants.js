@@ -1,7 +1,9 @@
-// constants.js
-// export const BASEURL = 'https://shortly-six-beta.vercel.app/api/v1'
-// export const URL = 'https://shortly-six-beta.vercel.app';
-// export const BASEURL = 'http://localhost:4000/api/v1'
-// export const URL = 'http://localhost:4000';
-export const BASEURL = 'https://shortly-klp2.onrender.com/api/v1'
-export const URL = 'https://shortly-klp2.onrender.com';
+const isProduction = import.meta.env.VITE_NODE_ENV === "production";
+const BASEURL = isProduction
+  ? import.meta.env.VITE_PRODUCTION_BASEURL
+  : import.meta.env.VITE_BASEURL;
+const URL = isProduction
+  ? import.meta.env.VITE_PRODUCTION_URL
+  : import.meta.env.VITE_URL;
+
+export { BASEURL, URL };

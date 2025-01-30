@@ -101,7 +101,7 @@ export async function handleGetAnalytics(req, res) {
     // Respond with analytics
     return res.status(200).json({
       nanoId: urlEntry.nanoId,
-      redirectUrl: urlEntry.redirectURL,
+      redirectURL: urlEntry.redirectURL,
       totalClicks: urlEntry.totalClicks,
       lastVisited: urlEntry.lastVisited,
       visitHistory: urlEntry.visitHistory,
