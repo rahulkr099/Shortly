@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import fetchWithAuth from '../api/fetchWithAuth'
 import {BASEURL} from '../utils/constants'
+import { apiRequest } from '../api/apiRequest';
 
 const useGoogleAuth = () => {
   const [isGoogleAuth, setIsGoogleAuth] = useState(false);
@@ -26,6 +27,15 @@ const useGoogleAuth = () => {
       }
     }
     checkGoogleAuth();
+    const googleTokenInterval = setInterval(async () => {
+      const newAccessToken = await apiRequest(`${BASEURL}/google/auth/status`);
+      console.log('Response in setInterval from refreshtoken:', newAccessToken);
+      
+        clearInterval(googleTokenInterval);
+      
+    }, 3 * 60 * 1000); // Refresh token every 1 hr 30 minutes
+    return () => clearInterval(googleTokenInterval);
+  
   }, [])
   return { isGoogleAuth, setIsGoogleAuth };
 }

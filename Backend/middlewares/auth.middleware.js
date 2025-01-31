@@ -12,9 +12,10 @@ export const auth = (req, res, next) => {
       req?.headers?.["authorization"]?.replace("Bearer ", "");
       console.log('token in authMiddleware.js',token)
     if(!token){
-       googleToken = req?.body?.googleMiddlewareToken || req?.cookies?.googleMiddlewareToken;
-       console.log('googleMiddlewareToken in authMiddleware.js body',req?.body?.googleMiddlewareToken);
-       console.log('googleMiddlewareToken in authMiddleware.js cookies',req?.cookies?.googleMiddlewareToken);
+       googleToken = req?.cookies?.googleMiddlewareToken;
+       
+       console.log('googleMiddlewareToken in authMiddleware.js cookies',
+        req?.cookies?.googleMiddlewareToken);
 
       // Check if the token is missing
     if (!googleToken && !token) {
@@ -32,7 +33,7 @@ export const auth = (req, res, next) => {
       }else{
         decode = jwt.verify(googleToken, process.env.Google_Middleware_TOKEN_SECRET);
       }
-      console.log(decode);
+      console.log('decoded the token in authMiddleware.js',decode);
       if (!decode) {
         return res
           .status(401)
