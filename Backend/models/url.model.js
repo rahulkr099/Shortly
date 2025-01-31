@@ -23,12 +23,33 @@ const urlSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    // History of visits
+    // Expiration date
+    expiresAt: {
+      type: Date,
+      default: null,
+    },
+    // History of visits with additional tracking data
     visitHistory: [
       {
         timestamp: {
           type: Date,
           default: Date.now,
+        },
+        referrer: {
+          type: String,
+          default: "Direct",
+        },
+        device: {
+          type: String,
+          default: "Unknown",
+        },
+        browser: {
+          type: String,
+          default: "Unknown",
+        },
+        ip: {
+          type: String,
+          default: "Unknown",
         },
       },
     ],

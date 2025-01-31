@@ -1,7 +1,8 @@
 // Import the URL model for database interactions
 import URL from "../models/url.model.js";
 import { nanoid } from "nanoid";
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
+import useragent from 'useragent';
 dotenv.config();
 
 export async function handleUserAnalytics(req, res) {
@@ -25,53 +26,37 @@ export async function handleUserAnalytics(req, res) {
 
 export async function handleShortenURL(req, res) {
   try {
-    const { url, customNanoId } = req.body; // Extract original URL and optional custom ID
-    const userId = req.user.id; // Get the authenticated user's ID
-;
-    // Validate the URL
-    if (!url) {
-      return res.status(400).json({ error: "URL is required" });
-    }
+    const { url, customNanoId, expiresAt } = req.body;
+    const userId = req.user.id;
+    if (!url) return res.status(400).json({ error: "URL is required" });
 
-    const urlPattern = new RegExp(
-      "^(https?:\\/\\/)?((([a-z\\d]([a-z\\d-]*[a-z\\d])*))" +
-        "(\\.[a-z]{2,})+|((\\d{1,3}\\.){3}\\d{1,3}))(:\\d+)?(\\/[-a-z\\d%_.~+]*)*" +
-        "(\\?[;&a-z\\d%_.~+=-]*)?(\\#[-a-z\\d_]*)?$",
-      "i"
-    );
-    if (!urlPattern.test(url)) {
-      return res.status(400).json({ error: "Invalid URL format" });
-    }
+    const urlPattern = new RegExp("^(https?:\\/\\/)?(([a-z\\d]([a-z\\d-]*[a-z\\d])*)" +
+      "(\\.[a-z]{2,})+|((\\d{1,3}\\.){3}\\d{1,3}))(:\\d+)?(\\/[-a-z\\d%_.~+]*)*" +
+      "(\\?[;&a-z\\d%_.~+=-]*)?(\\#[-a-z\\d_]*)?$", "i");
+    if (!urlPattern.test(url)) return res.status(400).json({ error: "Invalid URL format" });
 
-    // Check if the original URL already exists
-    const existingUrl = await URL.findOne({ redirectURL: url});
+    const existingUrl = await URL.findOne({ redirectURL: url });
     if (existingUrl) {
       return res.status(200).json({
         id: existingUrl.nanoId,
-        shortUrl: `${process.env.BASE_URL || "http://localhost:4000"}/url/${
-          existingUrl.nanoId
-        }`,
+        shortUrl: `${process.env.BASE_URL || "http://localhost:4000"}/url/${existingUrl.nanoId}`,
         message: "URL already shortened",
       });
     }
 
-    // Generate or validate the custom ID
     const nanoID = customNanoId || nanoid();
     if (customNanoId) {
       const existingCustomId = await URL.findOne({ nanoId: customNanoId });
-      if (existingCustomId) {
-        return res.status(400).json({ error: "Custom URL already exists" });
-      }
+      if (existingCustomId) return res.status(400).json({ error: "Custom URL already exists" });
     }
 
-    // Create a new URL urlEntry
     const newUrl = await URL.create({
       userId,
       nanoId: nanoID,
       redirectURL: url,
+      expiresAt: expiresAt ? new Date(expiresAt) : null,
     });
 
-    // Respond with the shortened URL
     return res.status(201).json({
       id: nanoID,
       shortUrl: `${process.env.BASE_URL || "http://localhost:4000"}/url/${nanoID}`,
@@ -116,21 +101,32 @@ export async function handleGetAnalytics(req, res) {
 export async function handleRedirect(req, res) {
   try {
     const { nanoId } = req.params;
-    
-    // Validate nanoId
     if (!nanoId) return res.status(400).json({ error: "Nano ID is required" });
 
-    // Fetch the URL urlEntry
     const urlEntry = await URL.findOne({ nanoId });
     if (!urlEntry) return res.status(404).json({ error: "URL not found" });
 
-    // Update visit history and analytics
-    urlEntry.visitHistory.push({ timestamp: new Date() });
+    if (urlEntry.expiresAt && new Date() > urlEntry.expiresAt) {
+      return res.status(410).json({ error: "This URL has expired" });
+    }
+
+    const referrer = req.get('Referrer') || 'Direct';
+    const userAgent = useragent.parse(req.get('User-Agent'));
+    const device = userAgent.device.family;
+    const browser = userAgent.toAgent();
+    const ip = req.ip;
+
+    urlEntry.visitHistory.push({ 
+      timestamp: new Date(), 
+      referrer, 
+      device, 
+      browser, 
+      ip 
+    });
     urlEntry.totalClicks += 1;
     urlEntry.lastVisited = new Date();
     await urlEntry.save();
 
-    // Redirect to the original URL
     return res.redirect(urlEntry.redirectURL);
   } catch (error) {
     console.error("Error during redirect:", error);
