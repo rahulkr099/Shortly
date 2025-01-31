@@ -1,6 +1,6 @@
 // import refreshGoogleToken from ("../utils/refreshGoogleToken")
 import { oauth2Client } from "../utils/oauth2Client.js";
-import {User} from '../models/user.model.js'
+import User from '../models/user.model.js'
 import { generateGoogleMiddlewareToken } from "../utils/generateToken.js";
 export const checkGoogleAccessToken = async (req, res) => {
   try {
