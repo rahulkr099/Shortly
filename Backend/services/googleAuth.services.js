@@ -10,9 +10,9 @@ export const checkGoogleAccessToken = async (req, res) => {
       console.log("googleAccessToken in cookies",req?.cookies?.googleAccessToken);
       console.log("googleAccessToken in body", req?.body?.googleAccessToken);
 
-    const googleMiddlewareToken =
-      req?.cookies?.googleMiddlewareToken || req?.body?.googleMiddlewareToken;
-      console.log("googleMiddlewareToken in googleAuthServices.js",googleMiddlewareToken);
+    // const googleMiddlewareToken =
+    //   req?.cookies?.googleMiddlewareToken || req?.body?.googleMiddlewareToken;
+    //   console.log("googleMiddlewareToken in googleAuthServices.js",googleMiddlewareToken);
 
     if (!accessToken) {
       return res.status(401).json({
@@ -46,14 +46,17 @@ export const checkGoogleAccessToken = async (req, res) => {
         message: "Google accessToken is expired",
       });
     }
-    // let user = await User.findOne({ email });
-    // const googleMiddlewareToken = generateGoogleMiddlewareToken({
-    //           firstName:user.firstName,
-    //           lastName:user.lastName,
-    //           email: user.email,
-    //           id: user._id,
-    //           role: user.role,
-    //         });
+    if (!userData || !userData.email) {
+      throw new Error("Invalid user data");
+    }
+    let user = await User.findOne({ email: userData.email });
+    const googleMiddlewareToken = generateGoogleMiddlewareToken({
+              firstName:user.firstName,
+              lastName:user.lastName,
+              email: user.email,
+              id: user._id,
+              role: user.role,
+            });
     const cookieOptions = {
       expires: new Date(Date.now() + 12 * 60 * 60 * 1000), //12 hr
       httpOnly: true,
