@@ -11,7 +11,8 @@ import QRCodeGenerator from "../components/QRCodeGenerator";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { setUrlData, clearUrlData } from '../../containers/urlSlice';
-import { ChevronUp, ChevronDown, Copy, BarChart } from 'lucide-react';
+// import { ChevronUp, ChevronDown, Copy, BarChart } from 'lucide-react';
+import { Copy } from 'lucide-react';
 
 function Home({ isGoogleAuth, isAuthenticated }) {
   const dispatch = useDispatch();
@@ -26,8 +27,8 @@ function Home({ isGoogleAuth, isAuthenticated }) {
   const [isLoading, setIsLoading] = useState(false);
   const [theme, setTheme] = useState("dark");
   const [searchQuery, setSearchQuery] = useState("");
-  const [expandedCards, setExpandedCards] = useState({});
-  const [expandAll, setExpandAll] = useState(false);
+  // const [expandedCards, setExpandedCards] = useState({});
+  // const [expandAll, setExpandAll] = useState(false);
 
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === "dark" ? "light" : "dark"));
@@ -119,20 +120,20 @@ function Home({ isGoogleAuth, isAuthenticated }) {
     });
   };
 
-  const toggleCard = (index) => {
-    setExpandedCards((prev) => ({
-      ...prev,
-      [index]: !prev[index],
-    }));
-  };
+  // const toggleCard = (index) => {
+  //   setExpandedCards((prev) => ({
+  //     ...prev,
+  //     [index]: !prev[index],
+  //   }));
+  // };
 
-  const toggleExpandAll = () => {
-    setExpandAll((prev) => !prev);
-    setExpandedCards(shortUrls.reduce((acc, _, index) => {
-      acc[index] = !expandAll;
-      return acc;
-    }, {}));
-  };
+  // const toggleExpandAll = () => {
+  //   setExpandAll((prev) => !prev);
+  //   setExpandedCards(shortUrls.reduce((acc, _, index) => {
+  //     acc[index] = !expandAll;
+  //     return acc;
+  //   }, {}));
+  // };
 
   const filteredShortUrls = shortUrls.filter((url) =>
     url.redirectUrl.toLowerCase().includes(searchQuery.toLowerCase()) ||

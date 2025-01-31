@@ -28,7 +28,7 @@ const useGoogleAuth = () => {
     }
     checkGoogleAuth();
     const googleTokenInterval = setInterval(async () => {
-      const newAccessToken = await apiRequest(`${BASEURL}/google/auth/status`);
+      const newAccessToken = await apiRequest(`${BASEURL}/google/auth/status`,"POST");
       console.log('Response in setInterval from refreshtoken:', newAccessToken);
       
         clearInterval(googleTokenInterval);
