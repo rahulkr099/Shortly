@@ -13,7 +13,8 @@ export const auth = (req, res, next) => {
       console.log('token in authMiddleware.js',token)
     if(!token){
        googleToken = req?.body?.googleMiddlewareToken || req?.cookies?.googleMiddlewareToken;
-       console.log('googleMiddlewareToken in authMiddleware.js',googleToken)
+       console.log('googleMiddlewareToken in authMiddleware.js body',req?.body?.googleMiddlewareToken);
+       console.log('googleMiddlewareToken in authMiddleware.js cookies',req?.cookies?.googleMiddlewareToken);
 
       // Check if the token is missing
     if (!googleToken && !token) {
