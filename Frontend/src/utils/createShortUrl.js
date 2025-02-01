@@ -1,9 +1,9 @@
 import { apiRequest } from "../api/apiRequest";
 import { URL } from "./constants";
-export async function createShortUrl(originalUrl, customNanoId=null) {
+export async function createShortUrl(originalUrl, customNanoId=null, expiresAt=null) {
   const endpoint = `${URL}/url/shorten`; // Replace with your actual endpoint
   try {
-    const response = await apiRequest(endpoint, "POST", { url: originalUrl ,customNanoId:customNanoId});
+    const response = await apiRequest(endpoint, "POST", { url: originalUrl ,customNanoId:customNanoId, expiresAt:expiresAt});
     console.log("Short URL created successfully:", response);
     return response; // Return the response for further use
   } catch (error) {

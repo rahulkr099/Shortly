@@ -5,7 +5,7 @@ import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom'
 import 'react-toastify/ReactToastify.css';
 import {Provider} from 'react-redux';
-import {store} from '../containers/store.js'
+import {store} from '../src/containers/store'
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>

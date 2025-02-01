@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { resetPassword } from '../api/auth';
-import { handleError, handleSuccess } from '../../utils';
+import { handleError, handleSuccess } from '../utils/utils';
 import { ToastContainer } from 'react-toastify';
 
 const ResetPassword = () => {

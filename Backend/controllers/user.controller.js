@@ -1,9 +1,6 @@
 import bcrypt from "bcrypt";
 import User from "../models/user.model.js";
-import {
-  generateAccessToken,
-  generateRefreshToken,
-} from "../utils/generateToken.js";
+import {generateAccessToken,generateRefreshToken} from "../utils/generateToken.js";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 dotenv.config();
@@ -243,7 +240,7 @@ export const refreshAccessToken = async (req, res) => {
     const userById = await User.findById(decodedToken?.id);
     // const userByEmail = await User.findOne({ email: decodedToken?.email });
 
-    console.log("User by ID from /refreshToken:", userById);
+    // console.log("User by ID from /refreshToken:", userById);
     // console.log("User by Email:", userByEmail);
 
     // const user = userById || userByEmail;

@@ -3,7 +3,7 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { googleAuth } from "../api/googleAuth";
 import PropTypes from 'prop-types'
 import { useDispatch } from "react-redux";
-import { loginSuccess } from "../../containers/authSlice";
+import { loginSuccess } from "../containers/authSlice";
 import { useNavigate } from "react-router-dom";
 
 const GoogleLogin = ({ setIsGoogleAuth }) => {

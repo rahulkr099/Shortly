@@ -29,7 +29,7 @@ export async function handleShortenURL(req, res) {
     const { url, customNanoId, expiresAt } = req.body;
     const userId = req.user.id;
     if (!url) return res.status(400).json({ error: "URL is required" });
-
+    console.log('expiresAt in handleShortenURL',expiresAt)
     const urlPattern = new RegExp("^(https?:\\/\\/)?(([a-z\\d]([a-z\\d-]*[a-z\\d])*)" +
       "(\\.[a-z]{2,})+|((\\d{1,3}\\.){3}\\d{1,3}))(:\\d+)?(\\/[-a-z\\d%_.~+]*)*" +
       "(\\?[;&a-z\\d%_.~+=-]*)?(\\#[-a-z\\d_]*)?$", "i");
@@ -44,7 +44,7 @@ export async function handleShortenURL(req, res) {
       });
     }
 
-    const nanoID = customNanoId || nanoid();
+    const nanoID = customNanoId || nanoid(8);
     if (customNanoId) {
       const existingCustomId = await URL.findOne({ nanoId: customNanoId });
       if (existingCustomId) return res.status(400).json({ error: "Custom URL already exists" });

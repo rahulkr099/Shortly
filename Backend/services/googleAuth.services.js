@@ -38,7 +38,7 @@ export const checkGoogleAccessToken = async (req, res) => {
       }
 
       userData = await userRes.json();
-      console.log("User Data in googleAuthServices:", userData);
+      // console.log("User Data in googleAuthServices:", userData);
     } catch (error) {
       console.error("Google accessToken is expired", error);
       return res.status(401).json({

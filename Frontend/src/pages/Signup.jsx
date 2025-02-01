@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { useState,useEffect } from 'react';
-import { handleError, handleSuccess } from '../../utils';
+import { handleError, handleSuccess } from '../utils/utils';
 import { BASEURL } from '../utils/constants';
 
 function Signup() {

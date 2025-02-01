@@ -33,7 +33,7 @@ export const auth = (req, res, next) => {
       }else{
         decode = jwt.verify(googleToken, process.env.Google_Middleware_TOKEN_SECRET);
       }
-      console.log('decoded the token in authMiddleware.js',decode);
+      // console.log('decoded the token in authMiddleware.js',decode);
       if (!decode) {
         return res
           .status(401)

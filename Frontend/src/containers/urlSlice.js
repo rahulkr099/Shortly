@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   originalUrl: '',
   customNanoId: '',
+  expiresAt: '',
 };
 
 const urlSlice = createSlice({
@@ -12,10 +13,12 @@ const urlSlice = createSlice({
     setUrlData(state, action) {
       state.originalUrl = action.payload.originalUrl;
       state.customNanoId = action.payload.customNanoId || '';
+      state.expiresAt = action.payload.expiresAt || '';
     },
     clearUrlData(state) {
       state.originalUrl = '';
       state.customNanoId = '';
+      state.expiresAt = '';
     },
   },
 });

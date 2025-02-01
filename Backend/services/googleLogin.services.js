@@ -51,9 +51,9 @@ export const googleLogin = async (req, res) => {
       });
     }
     const googleAccessToken = googleRes.tokens.access_token;
-    console.log("googleAccessToken", googleAccessToken);
+    console.log("googleAccessToken in googleLogin", googleAccessToken);
     const googleRefreshToken = googleRes.tokens.refresh_token;
-    console.log('googleRefreshToken',googleRefreshToken);
+    console.log('googleRefreshToken in googleLogin',googleRefreshToken);
     // const id_token = googleRes.tokens.id_token;
 //googleMiddlewareToken is used to store google authenticated user details. So that we can 
 //verify authenticated user is accessing the services.

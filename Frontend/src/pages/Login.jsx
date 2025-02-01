@@ -1,9 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { loginSuccess } from "../../containers/authSlice";
+import { loginSuccess } from "../containers/authSlice";
 import { useState } from "react";
-import { handleError, handleSuccess } from "../../utils";
+import { handleError, handleSuccess } from "../utils/utils";
 import PropTypes from 'prop-types';
 import GoogleLogin from "./GoogleLogin";
 import { BASEURL } from "../utils/constants";
