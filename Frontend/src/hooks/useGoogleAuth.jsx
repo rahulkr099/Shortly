@@ -24,16 +24,17 @@ const useGoogleAuth = () => {
       } else {
         setIsGoogleAuth(false);
       }
+      const googleTokenInterval = setInterval(async () => {
+        const newAccessToken = await apiRequest(`${BASEURL}/google/auth/status`,"POST");
+        console.log('Response in setInterval from refreshtoken:', newAccessToken);
+        
+          clearInterval(googleTokenInterval);
+        
+      }, 3 * 60 * 1000); // Refresh token every 1 hr 30 minutes
+      return () => clearInterval(googleTokenInterval);
     }
     checkGoogleAuth();
-    const googleTokenInterval = setInterval(async () => {
-      const newAccessToken = await apiRequest(`${BASEURL}/google/auth/status`,"POST");
-      console.log('Response in setInterval from refreshtoken:', newAccessToken);
-      
-        clearInterval(googleTokenInterval);
-      
-    }, 3 * 60 * 1000); // Refresh token every 1 hr 30 minutes
-    return () => clearInterval(googleTokenInterval);
+    
   
   }, [])
   return { isGoogleAuth, setIsGoogleAuth };
