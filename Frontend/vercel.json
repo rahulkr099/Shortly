@@ -1,8 +1,24 @@
 {
+    "redirects": [
+      {
+        "source": "/",
+        "destination": "https://www.shortlyapp.in",
+        "permanent": true
+      }
+    ],
     "rewrites": [
-        {
-            "source": "/(.*)",
-            "destination":"/index.html"
-        }
+      {
+        "source": "/url/:slug",
+        "destination": "https://216.24.57.1/url/:slug"
+      },
+      {
+        "source": "/api/v1/:path*",
+        "destination": "https://216.24.57.1/api/v1/:path*"
+      },
+      {
+        "source": "/ping",
+        "destination": "https://216.24.57.1/ping"
+      }
     ]
-}
+  }
+  
