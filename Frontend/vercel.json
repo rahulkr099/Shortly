@@ -1,6 +1,6 @@
 {
     "redirects": [ {
-        "source": "https://shortlyapp.in/",
+        "source": "shortlyapp.in/",
         "destination": "https://www.shortlyapp.in",
         "permanent": true
       }],
