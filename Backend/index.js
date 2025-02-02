@@ -44,6 +44,9 @@ app.use(
   })
 );
 
+// Preflight request handling
+app.options("*", cors());
+
 // Helmet Configuration (Security Headers)
 app.use(
   helmet({
@@ -67,8 +70,6 @@ app.use(
   })
 );
 
-// // Preflight request handling
-app.options("*", cors());
 
 //7. Rate Limiting
 const limiter = rateLimit({
