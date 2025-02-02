@@ -12,6 +12,7 @@ import { authStatus } from '../services/authStatus.services.js';
 import {googleLogin} from "../services/googleLogin.services.js";
 import { checkGoogleAccessToken, authenticateGoogleRequest } from '../services/googleAuth.services.js';
 import {revokeGoogleToken} from '../services/revokeGoogleToken.services.js';
+import { generateAvatar } from '../controllers/avatar.controller.js';
 
 //  Authentication routes
 router.post("/signup",validateRequest(signupSchema),signup);
@@ -23,6 +24,7 @@ router.get("/test",auth,(req,res)=>{
         message: "Test Successful"
     });
 });
+router.get("/avatar/:firstName/:lastName?",generateAvatar);//? makes lastName optional
 router.post("/logout",logout);
 router.post("/auth/status",authStatus);
 router.post("/refresh-token",refreshAccessToken)

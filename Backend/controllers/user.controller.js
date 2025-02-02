@@ -116,9 +116,9 @@ export const login = async (req, res) => {
     }
     //5.Generate JWT
     const accessToken = generateAccessToken({
-      /*username:user.username,
-             firstName:user.firstName,
-             lastName:user.lastName */
+      /*username:user.username,*/
+      firstName:user.firstName,
+      lastName:user.lastName,
       email: user.email,
       id: user._id,
       role: user.role,

@@ -8,9 +8,9 @@ export const authStatus = (req, res) => {
   try {
     // Retrieve token from request body, cookies, or headers
     const token = req?.cookies?.accessToken || req?.body?.accessToken;
-    console.log("auth ka token", token);
-    console.log("accessToken in cookies", req?.cookies?.accessToken);
-    console.log("accessToken in body", req?.body?.accessToken);
+    console.log("\nauth ka token", token);
+    console.log("\naccessToken in cookies", req?.cookies?.accessToken);
+    console.log("\naccessToken in body", req?.body?.accessToken);
     // Check if the token is missing
     if (!token) {
       return res.status(403).json({

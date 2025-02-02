@@ -6,9 +6,9 @@ export const checkGoogleAccessToken = async (req, res) => {
   try {
     const accessToken =
       req?.cookies?.googleAccessToken || req?.body?.googleAccessToken;
-      console.log("accessToken in googleAuthServices.js", accessToken);
-      console.log("googleAccessToken in cookies",req?.cookies?.googleAccessToken);
-      console.log("googleAccessToken in body", req?.body?.googleAccessToken);
+      console.log("\naccessToken in googleAuthServices.js", accessToken);
+      console.log("\ngoogleAccessToken in cookies",req?.cookies?.googleAccessToken);
+      console.log("\ngoogleAccessToken in body", req?.body?.googleAccessToken);
 
     // const googleMiddlewareToken =
     //   req?.cookies?.googleMiddlewareToken || req?.body?.googleMiddlewareToken;
@@ -83,7 +83,7 @@ export const checkGoogleAccessToken = async (req, res) => {
 
 export const authenticateGoogleRequest = async (req, res) => {
   try {
-    console.log("Trying to authenticate google access token via refresh token.");
+    console.log("\nTrying to authenticate google access token via refresh token.");
 
     // Retrieve refresh token from cookies or body
     const incomingRefreshToken =
@@ -129,7 +129,7 @@ export const authenticateGoogleRequest = async (req, res) => {
 //Refresh Google access token
 const refreshGoogleToken = async (refreshToken) => {
   try {
-    console.log("Refreshing access token...");
+    console.log("\nRefreshing access token...");
     oauth2Client.setCredentials({ refresh_token: refreshToken });
 
     const { credentials } = await oauth2Client.refreshAccessToken();

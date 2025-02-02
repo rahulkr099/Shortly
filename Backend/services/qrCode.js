@@ -1,7 +1,7 @@
 import QRCode from 'qrcode';
 export const qrcode = async (req, res) => {
     const { url } = req.body;
-    console.log('url in qrcode.js',url);
+    console.log('\nurl in qrcode.js',url);
     if (!url) {
         return res.status(400).send({ error: 'URL is required' });
     }

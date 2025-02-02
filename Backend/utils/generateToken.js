@@ -15,6 +15,6 @@ export const generateRefreshToken = (payload) => {
 }
 export const generateGoogleMiddlewareToken = (payload) => {
     return jwt.sign(payload,process.env.Google_Middleware_TOKEN_SECRET,{
-        expiresIn: '2m',
+        expiresIn: '20m',
     })
 }

@@ -84,7 +84,7 @@ export const resetPassword = async (req, res) => {
     // const token = req?.cookies?.urltoken;
     // const tokenInUrl = req?.params?.token;
     const tokenInUrl = req?.query?.token;
-    // console.log('reset password:',token,tokenInUrl);
+    // console.log('\nreset password:',token,tokenInUrl);
 
     if (!tokenInUrl) {
       return res.json({

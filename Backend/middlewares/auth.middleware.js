@@ -10,11 +10,11 @@ export const auth = (req, res, next) => {
       req?.cookies?.accessToken ||
       req?.body?.accessToken ||
       req?.headers?.["authorization"]?.replace("Bearer ", "");
-      console.log('token in authMiddleware.js',token)
+      console.log('\ntoken in authMiddleware.js',token)
     if(!token){
        googleToken = req?.cookies?.googleMiddlewareToken;
        
-       console.log('googleMiddlewareToken in authMiddleware.js cookies',
+       console.log('\ngoogleMiddlewareToken in authMiddleware.js cookies',
         req?.cookies?.googleMiddlewareToken);
 
       // Check if the token is missing
@@ -33,7 +33,7 @@ export const auth = (req, res, next) => {
       }else{
         decode = jwt.verify(googleToken, process.env.Google_Middleware_TOKEN_SECRET);
       }
-      // console.log('decoded the token in authMiddleware.js',decode);
+      // console.log('\ndecoded the token in authMiddleware.js',decode);
       if (!decode) {
         return res
           .status(401)
@@ -41,6 +41,7 @@ export const auth = (req, res, next) => {
       }
       req.user = decode;//user data is inserted in req so that we can check authenticated user is using our services
       //eg. while shortening our url we can check who is requesting for shortening service 
+      // console.log('\nreq body in authMiddleware',req);
     } catch (error) {
       return res.status(401).json({
         success: false,
