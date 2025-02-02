@@ -9,15 +9,15 @@
     "rewrites": [
       {
         "source": "/url/:slug",
-        "destination": "https://216.24.57.1/url/:slug"
+        "destination": "http://216.24.57.1/url/:slug"
       },
       {
         "source": "/api/v1/:path*",
-        "destination": "https://216.24.57.1/api/v1/:path*"
+        "destination": "http://216.24.57.1/api/v1/:path*"
       },
       {
         "source": "/ping",
-        "destination": "https://216.24.57.1/ping"
+        "destination": "http://216.24.57.1/ping"
       }
     ]
   }
