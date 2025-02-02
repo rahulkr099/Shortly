@@ -1,5 +1,9 @@
 {
-    "redirects": [],
+    "redirects": [ {
+        "source": "https://shortlyapp.in/",
+        "destination": "https://www.shortlyapp.in",
+        "permanent": true
+      }],
     "rewrites": [
       {
         "source": "/url/:slug",
