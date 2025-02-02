@@ -2,10 +2,9 @@ import PropTypes from 'prop-types';
 import AnalyticsButton from "./AnalyticsButton";
 import { setUrlData } from '../containers/urlSlice';
 
-function UrlForm({ originalUrl, customNanoId, expiresAt, isChecked, handleCheckboxChange, handleSubmit, isLoading, theme, dispatch ,message, error,setUi}) {
-   
-  
-    return (
+function UrlForm({ originalUrl, customNanoId, expiresAt, isChecked, handleCheckboxChange, handleSubmit, isLoading, theme, dispatch, message, error, setUi }) {
+
+  return (
     <div className={`p-6 rounded-lg shadow-md mb-8 ${theme === "light" ? "bg-white" : "bg-gray-800"}`}>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
@@ -73,14 +72,15 @@ function UrlForm({ originalUrl, customNanoId, expiresAt, isChecked, handleCheckb
           >
             {isLoading ? "Generating..." : "Generate"}
           </button>
-          <AnalyticsButton theme={theme} setUi={setUi}/>
+          <AnalyticsButton theme={theme} setUi={setUi} />
         </div>
       </form>
-      {message && <p className={`mt-4 text-sm ${theme === "light" ? "text-green-600" : "text-green-400"}`}>{message}</p>}
-              {error && <p className={`mt-4 text-sm ${theme === "light" ? "text-red-600" : "text-red-400"}`}>{error}</p>}
+      {message && <p className={`mt-4 text-base ${theme === "light" ? "text-green-600" : "text-green-400"}`}>{message}</p>}
+      {error && <p className={`mt-4 text-base ${theme === "light" ? "text-red-600" : "text-red-400"}`}>{error}</p>}
     </div>
   );
 }
+
 UrlForm.propTypes = {
   originalUrl: PropTypes.string.isRequired,
   customNanoId: PropTypes.string,
@@ -95,4 +95,5 @@ UrlForm.propTypes = {
   error: PropTypes.string,
   setUi: PropTypes.func,
 };
+
 export default UrlForm;

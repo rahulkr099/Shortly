@@ -6,7 +6,6 @@ import { apiRequest } from '../api/apiRequest';
 const useGoogleAuth = () => {
   const [isGoogleAuth, setIsGoogleAuth] = useState(false);
 
-
   useEffect(() => {
     const checkGoogleAuth = async () => {
 

@@ -36,8 +36,7 @@ app.use(express.urlencoded({ extended: true })); //Parse URL-encoded payloads
 app.use(
   cors({
     origin: [
-      "https://shortly-f.vercel.app",
-      "https://shortly-f-rahul-kumars-projects-cdeca0dc.vercel.app",
+      "https://shortly-five-hazel.vercel.app",'https://www.shortlyapp.in',
       ...(isProduction ? [] : ["http://localhost:5173"]),
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
@@ -53,7 +52,7 @@ app.use(
         defaultSrc: ["'self'"],
         scriptSrc: [
           "'self'",
-          process.env.FRONTEND_URL,
+          process.env.FRONTEND_URL,'https://www.shortlyapp.in',
           ...(isProduction ? [] : ["http://localhost:5173"]),
         ],
         connectSrc: [

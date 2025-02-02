@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 import { oauth2Client } from "../utils/oauth2Client.js";
 import User from "../models/user.model.js";
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 import { generateGoogleMiddlewareToken } from "../utils/generateToken.js";
 dotenv.config();
 /* GET Google Authentication API */
@@ -28,17 +28,23 @@ export const googleLogin = async (req, res) => {
       throw new Error(`Failed to fetch user info: ${errorText}`);
     }
 
-    const { email, name } = await userRes.json();
+    const { email, name, picture } = await userRes.json();
     if (!email || !name) {
       throw new Error("Incomplete user data received from Google");
     }
-
+    // console.log("\nuser response in googlelogin", email, name, picture);
     // Extract firstName and lastName from Google's name
     const [firstName, ...lastNameArray] = name.split(" ");
     const lastName = lastNameArray.join(" ");
 
     // Step 3: Check if user exists in the database
     let user = await User.findOne({ email });
+
+    // Just update the variable without saving to DB
+    user = user.toObject(); // Convert Mongoose model to plain object
+    user.picture = picture;
+
+    // console.log("\nuser details of googlelogin", user);
     if (!user) {
       user = await User.create({
         firstName,
@@ -51,31 +57,32 @@ export const googleLogin = async (req, res) => {
       });
     }
     const googleAccessToken = googleRes.tokens.access_token;
-    console.log("googleAccessToken in googleLogin", googleAccessToken);
+    console.log("\ngoogleAccessToken in googleLogin", googleAccessToken);
     const googleRefreshToken = googleRes.tokens.refresh_token;
-    console.log('googleRefreshToken in googleLogin',googleRefreshToken);
+    console.log("\ngoogleRefreshToken in googleLogin", googleRefreshToken);
     // const id_token = googleRes.tokens.id_token;
-//googleMiddlewareToken is used to store google authenticated user details. So that we can 
-//verify authenticated user is accessing the services.
+    
+    //googleMiddlewareToken is used to store google authenticated user details. So that we can
+    //verify authenticated user is accessing the services.
     const googleMiddlewareToken = generateGoogleMiddlewareToken({
-          firstName:user.firstName,
-          lastName:user.lastName,
-          email: user.email,
-          id: user._id,
-          role: user.role,
-        });
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      id: user._id,
+      role: user.role,
+    });
     const cookieOptions = {
       expires: new Date(Date.now() + 12 * 60 * 60 * 1000), //12 hr
       httpOnly: true,
-      sameSite: process.env.NODE_ENV === 'production'?'None':'strict',
-      secure: process.env.NODE_ENV === 'production'? true : false,
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "strict",
+      secure: process.env.NODE_ENV === "production" ? true : false,
     };
     // Step 5: Send the response
     return res
       .status(200)
       .cookie("googleAccessToken", googleAccessToken, cookieOptions)
-      .cookie("googleRefreshToken",googleRefreshToken,cookieOptions)
-      .cookie("googleMiddlewareToken",googleMiddlewareToken,cookieOptions)
+      .cookie("googleRefreshToken", googleRefreshToken, cookieOptions)
+      .cookie("googleMiddlewareToken", googleMiddlewareToken, cookieOptions)
       .json({
         success: true,
         message: "Authentication successful",

@@ -23,7 +23,7 @@ const CopyButton = ({ text, theme = "light" }) => {
       }`}
       aria-label={copied ? "Copied!" : "Copy to clipboard"}
     >
-      {copied ? <Check size={16} className="text-green-500" /> : <Copy size={16} />}
+      {copied ? <Check size={18} className="text-green-500" /> : <Copy size={16} />}
       {copied && (
         <span className="absolute top-full left-1/2 transform -translate-x-1/2 mt-1 text-xs bg-black text-white px-2 py-1 rounded">
           Copied!

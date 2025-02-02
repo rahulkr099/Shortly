@@ -16,9 +16,9 @@ const GoogleLogin = ({ setIsGoogleAuth }) => {
 				const result = await googleAuth(authResult.code);
 				console.log('result in googleLogin:', result);
 				const { googleRefreshToken, googleAccessToken, googleMiddlewareToken } = result;
-				const { email, firstName, lastName, role } = result.user;
+				const { email, firstName, lastName, role, picture } = result.user;
 				const token = result.token;
-				const user = { email, firstName, lastName, token, role };
+				const user = { email, firstName, lastName, picture, token, role };
 				console.log('obj of googleLogin:', user);
 				
 				const storageItems = {

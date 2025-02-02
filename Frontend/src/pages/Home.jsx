@@ -31,6 +31,18 @@ function Home({ isGoogleAuth, isAuthenticated }) {
   const [isChecked, setIsChecked] = useState(false);
   const navigate = useNavigate();
 
+   // Clear message and error after 3 seconds
+   useEffect(() => {
+    if (message || error) {
+      const timer = setTimeout(() => {
+        setMessage("");
+        setError("");
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [message, error]);
+
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === "dark" ? "light" : "dark"));
   };
