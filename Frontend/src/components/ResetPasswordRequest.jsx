@@ -1,24 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState, useContext } from 'react';
 import { requestResetPassword } from '../api/auth';
 import { ToastContainer } from 'react-toastify';
+import { ThemeContext } from '../hooks/ThemeContext';
 
 const ResetPasswordRequest = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [theme, setTheme] = useState('dark'); // Default theme is dark
-
-  // Toggle theme between dark and light
-  const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === 'dark' ? 'light' : 'dark'));
-  };
-
-  // Apply theme class to the root element
-  useEffect(() => {
-    document.documentElement.classList.remove('dark', 'light');
-    document.documentElement.classList.add(theme);
-  }, [theme]);
+  const {theme} = useContext(ThemeContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,13 +31,6 @@ const ResetPasswordRequest = () => {
 
   return (
     <div className={`min-h-screen flex flex-col justify-center items-center transition-colors duration-300 ${theme === 'light' ? 'bg-gray-100 text-gray-900' : 'bg-gray-900 text-gray-100'}`}>
-      {/* Theme Toggle Button */}
-      <button
-        onClick={toggleTheme}
-        className={`absolute top-4 right-4 p-2 rounded-full focus:outline-none ${theme === 'light' ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'}`}
-      >
-        {theme === 'dark' ? '🌙' : '☀️'}
-      </button>
 
       <div className={`w-full max-w-md p-8 rounded-lg shadow-lg transition-colors duration-300 ${theme === 'light' ? 'bg-white' : 'bg-gray-800'}`}>
         <h1 className={`text-3xl font-bold mb-6 text-center ${theme === 'light' ? 'text-gray-900' : 'text-gray-100'}`}>Reset Password</h1>

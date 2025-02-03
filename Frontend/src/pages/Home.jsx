@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState ,useContext} from "react";
 import { handleError, handleSuccess } from "../utils/utils";
 import Overlays from "../Mod/Overlays";
 import { useSetAtom } from "jotai";
@@ -9,12 +9,13 @@ import QRCodeGenerator from "../components/QRCodeGenerator";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { setUrlData, clearUrlData } from '../containers/urlSlice';
-import ThemeToggleButton from '../Home/ThemeToggleButton'
+// import ThemeToggleButton from '../Home/ThemeToggleButton'
 import Header from "../Home/Header";
 import UrlForm from "../Home/UrlForm";
 import SearchBar from "../Home/SearchBar";
 import ShortUrlTable from "../Home/ShortUrlTable";
 import ShortUrlList from "../Home/ShortUrlList";
+import { ThemeContext } from "../hooks/ThemeContext";
 
 function Home({ isGoogleAuth, isAuthenticated }) {
   const dispatch = useDispatch();
@@ -26,7 +27,7 @@ function Home({ isGoogleAuth, isAuthenticated }) {
   const [error, setError] = useState("");
   const [shortUrlForQRCode, setShortUrlForQRCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [theme, setTheme] = useState("dark");
+  const {theme} = useContext(ThemeContext)
   const [searchQuery, setSearchQuery] = useState("");
   const [isChecked, setIsChecked] = useState(false);
   const navigate = useNavigate();
@@ -43,14 +44,14 @@ function Home({ isGoogleAuth, isAuthenticated }) {
     }
   }, [message, error]);
 
-  const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === "dark" ? "light" : "dark"));
-  };
+  // const toggleTheme = () => {
+  //   setTheme((prevTheme) => (prevTheme === "dark" ? "light" : "dark"));
+  // };
 
-  useEffect(() => {
-    document.documentElement.classList.remove("dark", "light");
-    document.documentElement.classList.add(theme);
-  }, [theme]);
+  // useEffect(() => {
+  //   document.documentElement.classList.remove("dark", "light");
+  //   document.documentElement.classList.add(theme);
+  // }, [theme]);
 
   const handleSubmit = useCallback(
     async (e) => {
@@ -139,9 +140,9 @@ function Home({ isGoogleAuth, isAuthenticated }) {
     <div className={`min-h-screen p-4 transition-colors duration-300 ${theme === "light" ? "bg-gray-100 text-gray-900" : "bg-gray-900 text-gray-100"}`}>
       <Overlays theme={theme}/>
       <div className="max-w-7xl mx-auto">
-        <div className="flex justify-end mb-4">
+        {/* <div className="flex justify-end mb-4">
           <ThemeToggleButton theme={theme} toggleTheme={toggleTheme} />
-        </div>
+        </div> */}
 
         <Header loggedInUser={loggedInUser} theme={theme} />
 

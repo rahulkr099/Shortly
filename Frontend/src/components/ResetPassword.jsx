@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { resetPassword } from '../api/auth';
 import { handleError, handleSuccess } from '../utils/utils';
 import { ToastContainer } from 'react-toastify';
+import { ThemeContext } from '../hooks/ThemeContext';
 
 const ResetPassword = () => {
   const location = useLocation(); // Access query parameters from the URL
@@ -12,20 +13,8 @@ const ResetPassword = () => {
 
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [theme, setTheme] = useState('dark'); // Default theme is dark
-
+  const {theme} = useContext(ThemeContext)
   const navigate = useNavigate();
-
-  // Toggle theme between dark and light
-  const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === 'dark' ? 'light' : 'dark'));
-  };
-
-  // Apply theme class to the root element
-  useEffect(() => {
-    document.documentElement.classList.remove('dark', 'light');
-    document.documentElement.classList.add(theme);
-  }, [theme]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,12 +36,6 @@ const ResetPassword = () => {
   return (
     <div className={`min-h-screen flex flex-col justify-center items-center transition-colors duration-300 ${theme === 'light' ? 'bg-gray-100 text-gray-900' : 'bg-gray-900 text-gray-100'}`}>
       {/* Theme Toggle Button */}
-      <button
-        onClick={toggleTheme}
-        className={`absolute top-4 right-4 p-2 rounded-full focus:outline-none ${theme === 'light' ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'}`}
-      >
-        {theme === 'dark' ? '🌙' : '☀️'}
-      </button>
 
       <div className={`w-full max-w-md p-8 rounded-lg shadow-lg transition-colors duration-300 ${theme === 'light' ? 'bg-white' : 'bg-gray-800'}`}>
         <h1 className={`text-3xl font-bold mb-6 text-center ${theme === 'light' ? 'text-gray-900' : 'text-gray-100'}`}>Set New Password</h1>

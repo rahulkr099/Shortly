@@ -1,12 +1,16 @@
 import { Link, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { BASEURL } from '../utils/constants';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import ThemeToggleButton from '../Home/ThemeToggleButton';
+import { ThemeContext } from '../hooks/ThemeContext';
+
 
 const Navbar = ({ isAuthenticated, setIsAuthenticated, isGoogleAuth, setIsGoogleAuth }) => {
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
   const [userImage, setUserImage] = useState('');
+  const { theme } = useContext(ThemeContext)
 
   const handleLogout = async () => {
     try {
@@ -60,7 +64,7 @@ const Navbar = ({ isAuthenticated, setIsAuthenticated, isGoogleAuth, setIsGoogle
           console.log("Fetching avatar for:", firstName, lastName);
 
           const response = await fetch(`${BASEURL}/avatar/${firstName}/${lastName}`);
-          console.log('\nresponse in navbar',response);
+          console.log('\nresponse in navbar', response);
           if (!response.ok) {
             throw new Error("Failed to fetch avatar");
           }
@@ -80,10 +84,13 @@ const Navbar = ({ isAuthenticated, setIsAuthenticated, isGoogleAuth, setIsGoogle
   }, [isAuthenticated, isGoogleAuth]); // Re-run if authentication status changes
 
   return (
-    <nav className="bg-white dark:bg-gray-800 shadow-lg backdrop-filter backdrop-blur-lg bg-opacity-90 dark:bg-opacity-90">
+
+    <nav className={`shadow-lg backdrop-filter backdrop-blur-lg bg-opacity-90 dark:bg-opacity-90 transition-colors duration-300 ${theme === "light" ? "bg-white text-gray-800" : "bg-gray-800 text-gray-100"
+      }`}>
       <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-4">
         <div className="flex justify-between h-14 items-center">
-          <div className="flex items-center">
+          <div className='flex justify-around'>
+          {/* <div className="flex items-center"> */}
             <Link
               to="/home"
               className="text-gray-700 dark:text-gray-200 hover:text-green-500 dark:hover:text-green-400 transition-colors text-xl font-bold"
@@ -91,6 +98,10 @@ const Navbar = ({ isAuthenticated, setIsAuthenticated, isGoogleAuth, setIsGoogle
               Home
             </Link>
           </div>
+          <div className="flex justify-end absolute right-5">
+            <ThemeToggleButton />
+          </div>
+          {/* </div> */}
           <div className="flex items-center">
             {isAuthenticated || isGoogleAuth ? (
               <div className="relative">
@@ -137,6 +148,7 @@ const Navbar = ({ isAuthenticated, setIsAuthenticated, isGoogleAuth, setIsGoogle
         </div>
       </div>
     </nav>
+    // </div>
   );
 };
 

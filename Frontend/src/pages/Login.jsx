@@ -2,19 +2,20 @@ import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../containers/authSlice";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { handleError, handleSuccess } from "../utils/utils";
 import PropTypes from 'prop-types';
 import GoogleLogin from "./GoogleLogin";
 import { BASEURL } from "../utils/constants";
+import { ThemeContext } from "../hooks/ThemeContext";
 
 function Login({ setIsAuthenticated, GoogleAuthWrapper }) {
   const [loginInfo, setLoginInfo] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
-  const [theme, setTheme] = useState("light"); // State to manage theme
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const {theme} = useContext(ThemeContext)
   const handleChange = (e) => {
     const { name, value } = e.target;
     setLoginInfo((prev) => ({ ...prev, [name]: value }));
@@ -61,19 +62,12 @@ function Login({ setIsAuthenticated, GoogleAuthWrapper }) {
     }
   };
 
-  const toggleTheme = () => {
-    setTheme(theme === "light" ? "dark" : "light");
-  };
+
 
   return (
     <div className={`min-h-screen flex flex-col justify-center items-center transition-colors duration-300 ${theme === "light" ? "bg-gray-100 text-gray-900" : "bg-gray-900 text-gray-100"}`}>
-      <button
-        onClick={toggleTheme}
-        className={`absolute top-4 right-4 p-2 rounded-full ${theme === "light" ? "bg-gray-800 text-white" : "bg-white text-gray-800"}`}
-      >
-        {theme === "light" ? "🌙" : "☀️"}
-      </button>
-      <h1 className="text-4xl font-bold mb-8">Login Page</h1>
+
+      <h1 className="text-black dark:text-white text-4xl font-bold mb-8">Login Page</h1>
       <div className={`w-full max-w-md p-8 rounded-xl shadow-lg transition-colors duration-300 ${theme === "light" ? "bg-white" : "bg-gray-800"}`}>
         <form onSubmit={handleLogin} className="space-y-6">
           <div>

@@ -10,16 +10,14 @@ function RefreshHandler({ isAuthenticated, isGoogleAuth }) {
     console.log('RefreshHandler triggered');
     console.log('Auth State:', { isAuthenticated, isGoogleAuth });
 
-    const publicRoutes = ["/", "/login", "/signup", "/home"];
+    const publicRoutes = ["/", "/login", "/signup", "/home", "/reset-password-token", "/reset-password"];
     const isOnPublicRoute = publicRoutes.includes(location.pathname);
 
     if (isAuthenticated || isGoogleAuth) {
-      // Redirect to home if user is authenticated and on a public route (except /home)
       if (isOnPublicRoute && location.pathname !== "/home") {
         navigate("/home", { replace: true });
       }
     } else {
-      // Redirect to login if unauthenticated and trying to access restricted routes (excluding /home)
       if (!isOnPublicRoute && location.pathname !== "/home") {
         navigate("/login", { replace: true });
       }

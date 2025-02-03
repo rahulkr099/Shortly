@@ -1,25 +1,15 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import { useState,useEffect } from 'react';
+import { useState, useContext } from 'react';
 import { handleError, handleSuccess } from '../utils/utils';
 import { BASEURL } from '../utils/constants';
+import { ThemeContext } from '../hooks/ThemeContext';
 
 function Signup() {
   const [signupInfo, setSignupInfo] = useState({ firstName: '', lastName: '', email: '', password: '', role: '' });
-  const [theme, setTheme] = useState('dark'); // Default theme is dark
+  
   const navigate = useNavigate();
-
-  // Toggle theme between dark and light
-  const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === 'dark' ? 'light' : 'dark'));
-  };
-
-  // Apply theme class to the root element
-  useEffect(() => {
-    document.documentElement.classList.remove('dark', 'light');
-    document.documentElement.classList.add(theme);
-  }, [theme]);
-
+  const {theme} = useContext(ThemeContext)
   // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -63,14 +53,6 @@ function Signup() {
 
   return (
     <div className={`min-h-screen flex flex-col justify-center items-center transition-colors duration-300 ${theme === 'light' ? 'bg-gray-100 text-gray-900' : 'bg-gray-900 text-gray-100'}`}>
-      {/* Theme Toggle Button */}
-      <button
-        onClick={toggleTheme}
-        className={`absolute top-4 right-4 p-2 rounded-full focus:outline-none ${theme === 'light' ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'}`}
-      >
-        {theme === 'dark' ? '🌙' : '☀️'}
-      </button>
-
       <h1 className={`text-4xl font-bold mb-8 ${theme === 'light' ? 'text-gray-900' : 'text-gray-100'}`}>Signup</h1>
       <div className={`w-full max-w-md p-8 rounded-lg shadow-lg transition-colors duration-300 ${theme === 'light' ? 'bg-white' : 'bg-gray-800'}`}>
         <form onSubmit={handleSignup} className='space-y-6'>

@@ -52,7 +52,7 @@ const GoogleLogin = ({ setIsGoogleAuth }) => {
 	})
 	return (
 		<div>
-			<button onClick={googleLogin} className='border border-blue-400 mt-1 hover:text-white hover:bg-blue-400 p-1 rounded-lg bg-blue-400'>Login With Google</button>
+			<button onClick={googleLogin} className='text-white font-semibold border border-blue-400 mt-1 hover:text-white hover:bg-blue-400 p-1 rounded-lg bg-blue-500'>Login With Google</button>
 		</div>
 	)
 }
