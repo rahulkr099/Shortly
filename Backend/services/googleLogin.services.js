@@ -1,22 +1,12 @@
-import fetch from "node-fetch";
-import { oauth2Client } from "../utils/oauth2Client.js";
-import User from "../models/user.model.js";
-import dotenv from "dotenv";
-import { generateGoogleMiddlewareToken } from "../utils/generateToken.js";
-dotenv.config();
-/* GET Google Authentication API */
 export const googleLogin = async (req, res) => {
   const code = req.query.code;
-  // console.log("backend google controller:", code);
   if (!code) {
-    return res.status(400).json({
-      message: "Authorization code is missing",
-    });
+    return res.status(400).json({ message: "Authorization code is missing" });
   }
+
   try {
     // Step 1: Exchange authorization code for access tokens
     const googleRes = await oauth2Client.getToken(code);
-    // console.log('tokens in googlecontroller:',googleRes)
     oauth2Client.setCredentials(googleRes.tokens);
 
     // Step 2: Fetch user info from Google API
@@ -32,7 +22,7 @@ export const googleLogin = async (req, res) => {
     if (!email || !name) {
       throw new Error("Incomplete user data received from Google");
     }
-    // console.log("\nuser response in googlelogin", email, name, picture);
+
     // Extract firstName and lastName from Google's name
     const [firstName, ...lastNameArray] = name.split(" ");
     const lastName = lastNameArray.join(" ");
@@ -40,11 +30,6 @@ export const googleLogin = async (req, res) => {
     // Step 3: Check if user exists in the database
     let user = await User.findOne({ email });
 
-    // Just update the variable without saving to DB
-    user = user.toObject(); // Convert Mongoose model to plain object
-    user.picture = picture;
-
-    // console.log("\nuser details of googlelogin", user);
     if (!user) {
       user = await User.create({
         firstName,
@@ -52,18 +37,16 @@ export const googleLogin = async (req, res) => {
         authType: "google",
         email,
         role: "user", // Default role as 'user'
-        // accessToken: googleRes.tokens.access_token,
-        // refreshToken: googleRes.tokens.refresh_token,
       });
     }
+
+    // Convert Mongoose model to plain object **after user is guaranteed to exist**
+    user = user.toObject();
+    user.picture = picture;
+
     const googleAccessToken = googleRes.tokens.access_token;
-    console.log("\ngoogleAccessToken in googleLogin", googleAccessToken);
     const googleRefreshToken = googleRes.tokens.refresh_token;
-    console.log("\ngoogleRefreshToken in googleLogin", googleRefreshToken);
-    // const id_token = googleRes.tokens.id_token;
-    
-    //googleMiddlewareToken is used to store google authenticated user details. So that we can
-    //verify authenticated user is accessing the services.
+
     const googleMiddlewareToken = generateGoogleMiddlewareToken({
       firstName: user.firstName,
       lastName: user.lastName,
@@ -71,12 +54,14 @@ export const googleLogin = async (req, res) => {
       id: user._id,
       role: user.role,
     });
+
     const cookieOptions = {
-      expires: new Date(Date.now() + 12 * 60 * 60 * 1000), //12 hr
+      expires: new Date(Date.now() + 12 * 60 * 60 * 1000), // 12 hr
       httpOnly: true,
-      sameSite: process.env.NODE_ENV === "production" ? "None" : "strict",
-      secure: process.env.NODE_ENV === "production" ? true : false,
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Strict",
+      secure: process.env.NODE_ENV === "production",
     };
+
     // Step 5: Send the response
     return res
       .status(200)
@@ -93,7 +78,6 @@ export const googleLogin = async (req, res) => {
       });
   } catch (err) {
     console.error("Google Authentication Error:", err.message);
-
     res.status(500).json({
       message: "Internal Server Error",
       error: err.message,
