@@ -1,3 +1,9 @@
+import fetch from "node-fetch";
+import { oauth2Client } from "../utils/oauth2Client.js";
+import User from "../models/user.model.js";
+import dotenv from "dotenv";
+import { generateGoogleMiddlewareToken } from "../utils/generateToken.js";
+dotenv.config();
 export const googleLogin = async (req, res) => {
   const code = req.query.code;
   if (!code) {
