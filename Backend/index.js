@@ -82,6 +82,13 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
+app.use((req, res, next) => {
+  if (req.hostname === "shortlyapp.in") {
+    return res.redirect(301, `https://www.shortlyapp.in`);
+  }
+  next();
+});
+
 //8. Define routes
 app.use("/api/v1", userRoutes);
 app.use("/url", urlRoutes);
